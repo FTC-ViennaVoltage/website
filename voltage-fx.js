@@ -249,8 +249,8 @@
     });
 
     (function anim() {
-      gx = lerp(gx, mx, 0.35); gy = lerp(gy, my, 0.35);
-      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
+      gx = lerp(gx, mx, 0.8); gy = lerp(gy, my, 0.8);
+      rx = lerp(rx, mx, 0.5); ry = lerp(ry, my, 0.5);
       glow.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
       ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
 
