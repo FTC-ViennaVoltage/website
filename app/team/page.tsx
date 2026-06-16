@@ -35,7 +35,7 @@ const members: Member[] = [
   {
     name: "Joshua L",
     initials: "JL",
-    tags: ["Vice Captain", "Robot Design", "Mechanical", "Outreach"],
+    tags: ["Robot Design", "Mechanical", "Outreach"],
     bio: PLACEHOLDER_BIO,
   },
   {
