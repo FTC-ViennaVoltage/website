@@ -166,7 +166,7 @@ function ContactSection() {
           <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-4">
             Contact Vienna Voltage
           </h2>
-          <p className="text-muted leading-[1.8] mb-8">
+          <p className="text-muted leading-[1.8] mb-2">
             Interested in partnering, volunteering, or sponsoring?
           </p>
 
