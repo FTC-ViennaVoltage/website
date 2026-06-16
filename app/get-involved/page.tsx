@@ -166,11 +166,11 @@ function ContactSection() {
           <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-4">
             Contact Vienna Voltage
           </h2>
-          <p className="text-muted leading-[1.8] mb-0">
+          <p className="text-muted leading-[1.8] mb-4">
             Interested in partnering, volunteering, or sponsoring?
           </p>
 
-          <div className="space-y-4 mb-4">
+          <div className="space-y-4 mb-1">
             <p className="text-[0.95rem]" style={{ color: 'var(--text)' }}>
               📧 ftcviennavoltage@gmail.com
             </p>
