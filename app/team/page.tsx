@@ -30,7 +30,7 @@ const members: Member[] = [
     name: "Harry B",
     photo: "harrybai.png",
     tags: ["Captain", "Robot Design", "Mechanical", "Programming", "Outreach"],
-    bio: "Hey guys, my name is Harry, and I am Langley '29. One fun fact about me is that I like listening to K-Pop, A LOT. Certified vibecoder",
+    bio: "Hey guys, my name is Harry, and I'm Langley '29. I like listening to K-Pop and I'm a certified vibecoder.",
   },
   {
     name: "Joshua L",
