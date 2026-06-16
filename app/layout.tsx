@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/nav";
+import Footer from "@/components/footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const space = Space_Grotesk({
+  variable: "--font-space-sans",
   subsets: ["latin"],
 });
 
@@ -16,11 +16,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} h-full antialiased`}
+      className={`${space.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );
