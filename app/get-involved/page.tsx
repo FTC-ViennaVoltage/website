@@ -170,8 +170,8 @@ function ContactSection() {
             Interested in partnering, volunteering, or sponsoring?
           </p>
 
-          <div className="space-y-4 mb-8">
-            <p className="text-accent-light text-[0.95rem]">
+          <div className="space-y-4 mb-4">
+            <p className="text-[0.95rem]" style={{ color: 'var(--text)' }}>
               📧 ftcviennavoltage@gmail.com
             </p>
             <a
