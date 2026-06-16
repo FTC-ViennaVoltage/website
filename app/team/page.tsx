@@ -34,7 +34,7 @@ const members: Member[] = [
   },
   {
     name: "Joshua L",
-    initials: "JL",
+    photo: "joshual.png",
     tags: ["Robot Design", "Mechanical", "Outreach"],
     bio: PLACEHOLDER_BIO,
   },
@@ -52,7 +52,7 @@ const members: Member[] = [
   },
   {
     name: "Dalton S",
-    initials: "DS",
+    photo: "daltonsheng.png",
     tags: ["Robot Design", "Mechanical"],
     bio: PLACEHOLDER_BIO,
   },
@@ -82,7 +82,7 @@ const members: Member[] = [
   },
   {
     name: "Oliver Y",
-    initials: "OY",
+    photo: "olivery.png",
     tags: ["Mechanical", "Outreach"],
     bio: PLACEHOLDER_BIO,
   },
@@ -124,7 +124,7 @@ const members: Member[] = [
   },
   {
     name: "Karim A",
-    initials: "KA",
+    photo: "karima.png",
     tags: ["Programming"],
     bio: "LHS '29. NVCC '29 CS. Rewrote this entire website from scratch.",
   },
