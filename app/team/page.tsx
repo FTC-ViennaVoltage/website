@@ -30,19 +30,7 @@ const members: Member[] = [
     name: "Harry B",
     photo: "harrybai.png",
     tags: ["Captain", "Robot Design", "Mechanical", "Programming", "Outreach"],
-    bio: "Hey guys, my name is Harry, and I'm Langley '29. I like listening to K-Pop and I'm a certified vibecoder.",
-  },
-  {
-    name: "Joshua L",
-    photo: "joshual.png",
-    tags: ["Robot Design", "Mechanical", "Outreach"],
-    bio: PLACEHOLDER_BIO,
-  },
-  {
-    name: "Zakhar L",
-    initials: "ZL",
-    tags: ["Mechanical", "Programming", "Outreach"],
-    bio: PLACEHOLDER_BIO,
+    bio: "Langley '29. I like listening to K-Pop and I'm a certified vibecoder.",
   },
   {
     name: "Fionn M",
@@ -114,7 +102,7 @@ const members: Member[] = [
     name: "Leo W",
     photo: "leowang.png",
     tags: ["Programming"],
-    bio: PLACEHOLDER_BIO,
+    bio: "Langley '2029. I like math and computer science."
   },
   {
     name: "Landon Y",
