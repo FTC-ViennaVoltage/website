@@ -102,7 +102,7 @@ const members: Member[] = [
     name: "Leo W",
     photo: "leowang.png",
     tags: ["Programming"],
-    bio: "Langley '2029. I like math and computer science."
+    bio: "Langley '2029. I like math and computer science.",
   },
   {
     name: "Landon Y",
@@ -120,7 +120,7 @@ const members: Member[] = [
     name: "Robert L",
     photo: "robertliu.webp",
     tags: ["Outreach"],
-    bio: "Langley '2029. I like teaching others computer science and networking."
+    bio: "Langley '29. I like networking and teaching kids computer science.",
   },
 ];
 
