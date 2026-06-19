@@ -116,6 +116,12 @@ const members: Member[] = [
     tags: ["Programming"],
     bio: "LHS '29. NVCC '29 CS. Rewrote this entire website from scratch.",
   },
+  {
+    name: "Robert L",
+    photo: "robertliu.png",
+    tags: ["Outreach"],
+    bio: "Langley '2029. I like teaching others computer science and networking."
+  },
 ];
 
 type Advisor = {
