@@ -118,7 +118,7 @@ const members: Member[] = [
   },
   {
     name: "Robert L",
-    photo: "robertliu.png",
+    photo: "robertliu.webp",
     tags: ["Outreach"],
     bio: "Langley '2029. I like teaching others computer science and networking."
   },
