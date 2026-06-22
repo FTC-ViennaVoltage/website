@@ -72,7 +72,7 @@ const members: Member[] = [
     name: "Oliver Y",
     photo: "olivery.png",
     tags: ["Mechanical", "Outreach"],
-    bio: PLACEHOLDER_BIO,
+    bio: "TJHSST '29. I'm an avid hockey fan (go Caps!) and I'm interested in all things science and engineering.",
   },
   {
     name: "Joseph B",
