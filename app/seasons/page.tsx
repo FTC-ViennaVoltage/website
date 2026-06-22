@@ -157,15 +157,15 @@ export default function SeasonsPage() {
               <div className="flex gap-7 border-t border-border pt-6 mt-7">
                 <div>
                   <p className="text-xs text-muted uppercase tracking-wide">Competitions</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <p className="text-voltage-primary font-semibold mt-1">2</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted uppercase tracking-wide">Awards</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <p className="text-voltage-primary font-semibold mt-1">2</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted uppercase tracking-wide">Ranking</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <p className="text-voltage-primary font-semibold mt-1">7 (best)</p>
                 </div>
               </div>
 
