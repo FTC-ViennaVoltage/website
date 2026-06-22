@@ -34,7 +34,7 @@ const members: Member[] = [
   },
   {
     name: "Fionn M",
-    initials: "FM",
+    initials: "fionnmoloney.png",
     tags: ["Robot Design", "Mechanical"],
     bio: PLACEHOLDER_BIO,
   },
@@ -76,7 +76,7 @@ const members: Member[] = [
   },
   {
     name: "Joseph B",
-    initials: "JB",
+    initials: "josephbobek.png",
     tags: ["Mechanical"],
     bio: PLACEHOLDER_BIO,
   },
