@@ -34,7 +34,7 @@ const members: Member[] = [
   },
   {
     name: "Fionn M",
-    initials: "fionnmoloney.webp",
+    photo: "fionnmoloney.webp",
     tags: ["Robot Design", "Mechanical"],
     bio: PLACEHOLDER_BIO,
   },
@@ -76,7 +76,7 @@ const members: Member[] = [
   },
   {
     name: "Joseph B",
-    initials: "josephbobek.webp",
+    photo: "josephbobek.webp",
     tags: ["Mechanical"],
     bio: "Langley '29. I am part of Langley FRC's build team in addition to FTC. I also do competitive wrestling.",
   },
