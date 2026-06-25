@@ -30,11 +30,11 @@ const members: Member[] = [
     name: "Harry B",
     photo: "harrybai.png",
     tags: ["Captain", "Robot Design", "Mechanical", "Programming", "Outreach"],
-    bio: "Langley '29. I like listening to K-Pop and I'm a certified vibecoder.",
+    bio: "Langley '29. I listen to K-Pop and I'm a certified vibecoder.",
   },
   {
     name: "Fionn M",
-    initials: "fionnmoloney.png",
+    initials: "fionnmoloney.webp",
     tags: ["Robot Design", "Mechanical"],
     bio: PLACEHOLDER_BIO,
   },
@@ -76,9 +76,9 @@ const members: Member[] = [
   },
   {
     name: "Joseph B",
-    initials: "josephbobek.png",
+    initials: "josephbobek.webp",
     tags: ["Mechanical"],
-    bio: PLACEHOLDER_BIO,
+    bio: "Langley '29. I am part of Langley FRC's build team in addition to FTC. I also do competitive wrestling.",
   },
   {
     name: "Bryan T",
@@ -90,7 +90,7 @@ const members: Member[] = [
     name: "Isaac L",
     photo: "isaaclin.png",
     tags: ["Mechanical", "Outreach"],
-    bio: PLACEHOLDER_BIO,
+    bio: "Langley '29. I am also part of Langley's FRC team, and outside of robotics, I like playing tennis.",
   },
   {
     name: "Caden O",
