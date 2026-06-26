@@ -59,9 +59,8 @@ export default function DonatePage() {
               Every contribution helps Team Vienna Voltage provide robotics
               education and competitive STEM experiences to our community.
             </p>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <a
+              
                 href="https://gofund.me/e5f7d42bb"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -70,14 +69,15 @@ export default function DonatePage() {
               >
                 <span>💚</span> GoFundMe
               </a>
-              <button
-                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white opacity-70 cursor-not-allowed"
-                style={{ background: "#0070ba" }}
+              
                 href="https://hcb.hackclub.com/donations/start/27427-vienna-voltage"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5"
+                style={{ background: "#0070ba" }}
               >
                 <span>🔵</span> Official Donation Page
-                <span className="text-xs opacity-80">(coming soon)</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>
