@@ -82,7 +82,7 @@ const members: Member[] = [
   },
   {
     name: "Bryan T",
-    initials: "BT",
+    photo: "bryantan.webp",
     tags: ["Mechanical"],
     bio: "TJHSST '29",
   },
