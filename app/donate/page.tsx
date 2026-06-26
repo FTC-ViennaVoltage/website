@@ -71,27 +71,11 @@ export default function DonatePage() {
                 <span>💚</span> GoFundMe
               </a>
               <button
-                disabled
                 className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white opacity-70 cursor-not-allowed"
                 style={{ background: "#0070ba" }}
+                href="https://hcb.hackclub.com/donations/start/27427-vienna-voltage"
               >
-                <span>🔵</span> PayPal
-                <span className="text-xs opacity-80">(coming soon)</span>
-              </button>
-              <button
-                disabled
-                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white opacity-70 cursor-not-allowed"
-                style={{ background: "#00c244" }}
-              >
-                <span>💵</span> Cash App
-                <span className="text-xs opacity-80">(coming soon)</span>
-              </button>
-              <button
-                disabled
-                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white opacity-70 cursor-not-allowed"
-                style={{ background: "#3d95ce" }}
-              >
-                <span>✈️</span> Venmo
+                <span>🔵</span> Official Donation Page
                 <span className="text-xs opacity-80">(coming soon)</span>
               </button>
             </div>
