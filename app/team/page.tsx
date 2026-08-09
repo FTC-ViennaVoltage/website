@@ -12,16 +12,49 @@ type Member = {
   bio: string;
 };
 
-const TAG_COLORS: Record<string, { bg: string; text: string }> = {
-  Captain: { bg: "rgba(59,130,246,.12)", text: "#3b82f6" },
-  'Build Lead': { bg: "rgba(16,185,129,.12)", text: "#10b981" },
-  "Vice Captain": { bg: "rgba(59,130,246,.12)", text: "#3b82f6" },
-  Build: { bg: "rgba(16,185,129,.12)", text: "#10b981" },
-  Software: { bg: "rgba(139,92,246,.12)", text: "#8b5cf6" },
-  'Software Lead': { bg: "rgba(139,92,246,.12)", text: "#8b5cf6" },
-  Outreach: { bg: "rgba(236,72,153,.12)", text: "#ec4899" },
-  'Outreach Lead': { bg: "rgba(236,72,153,.12)", text: "#ec4899" },
+type TagStyle = { bg: string; text: string; border?: string };
+
+/* One color family per subteam; the subteam's lead gets a brighter
+   shade, a stronger tint, and an outlined chip. Team leadership is gold. */
+const TAG_COLORS: Record<string, TagStyle> = {
+  Captain: { bg: "rgba(251,191,36,.18)", text: "#fcd34d", border: "rgba(251,191,36,.45)" },
+  "Vice Captain": { bg: "rgba(251,191,36,.10)", text: "#fbbf24", border: "rgba(251,191,36,.28)" },
+  "Build Lead": { bg: "rgba(52,211,153,.16)", text: "#6ee7b7", border: "rgba(52,211,153,.45)" },
+  Build: { bg: "rgba(52,211,153,.10)", text: "#34d399" },
+  "Software Lead": { bg: "rgba(167,139,250,.16)", text: "#c4b5fd", border: "rgba(167,139,250,.45)" },
+  Software: { bg: "rgba(167,139,250,.10)", text: "#a78bfa" },
+  "Outreach Lead": { bg: "rgba(244,114,182,.16)", text: "#f9a8d4", border: "rgba(244,114,182,.45)" },
+  Outreach: { bg: "rgba(244,114,182,.10)", text: "#f472b6" },
 };
+
+const FALLBACK_TAG: TagStyle = { bg: "rgba(107,127,153,.12)", text: "#6b7f99" };
+
+/* Leadership tags first, then subteams — controls chip order and lead sorting */
+const TAG_ORDER = [
+  "Captain",
+  "Vice Captain",
+  "Build Lead",
+  "Software Lead",
+  "Outreach Lead",
+  "Build",
+  "Software",
+  "Outreach",
+];
+
+const LEAD_TAGS = new Set(TAG_ORDER.slice(0, 5));
+
+const tagRank = (tag: string) => {
+  const i = TAG_ORDER.indexOf(tag);
+  return i === -1 ? TAG_ORDER.length : i;
+};
+
+const sortTags = (tags: string[]) =>
+  [...tags].sort((a, b) => tagRank(a) - tagRank(b));
+
+const isLead = (m: Member) => m.tags.some((t) => LEAD_TAGS.has(t));
+
+/* The lead's highest-ranking leadership tag — used for card accents */
+const leadTag = (m: Member) => sortTags(m.tags).find((t) => LEAD_TAGS.has(t));
 
 const PLACEHOLDER_BIO =
   "Placeholder — add your grade and a bit about what you work on.";
@@ -202,6 +235,11 @@ function MembersSection() {
     return () => observer.disconnect();
   }, []);
 
+  const leads = members
+    .filter(isLead)
+    .sort((a, b) => tagRank(leadTag(a)!) - tagRank(leadTag(b)!));
+  const rest = members.filter((m) => !isLead(m));
+
   return (
     <section ref={sectionRef} className="py-24 px-6">
       <div className="max-w-[1200px] mx-auto">
@@ -209,9 +247,21 @@ function MembersSection() {
           Team Members
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
-          {members.map((member, i) => (
-            <MemberCard key={i} member={member} />
+        <h3 className="fade-in text-center text-sm font-semibold tracking-[0.1em] uppercase text-muted mt-12 mb-6">
+          Leadership
+        </h3>
+        <div className="flex flex-wrap justify-center gap-5">
+          {leads.map((member) => (
+            <LeadCard key={member.name} member={member} />
+          ))}
+        </div>
+
+        <h3 className="fade-in text-center text-sm font-semibold tracking-[0.1em] uppercase text-muted mt-14 mb-6">
+          Members
+        </h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          {rest.map((member) => (
+            <MemberCard key={member.name} member={member} />
           ))}
         </div>
       </div>
@@ -219,56 +269,72 @@ function MembersSection() {
   );
 }
 
+function Avatar({ member, size, ring }: { member: Member; size: string; ring?: string }) {
+  const ringStyle = ring ? { boxShadow: `0 0 0 3px ${ring}` } : undefined;
+  return member.photo ? (
+    <div className={`${size} rounded-full overflow-hidden flex-shrink-0`} style={ringStyle}>
+      <img
+        src={`/photos/${member.photo}`}
+        alt={member.name}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  ) : (
+    <div
+      className={`${size} rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-muted`}
+      style={{ background: "var(--bg3)", ...ringStyle }}
+    >
+      {member.initials}
+    </div>
+  );
+}
+
+function TagChips({ tags }: { tags: string[] }) {
+  return (
+    <div className="flex flex-wrap justify-center gap-1.5">
+      {sortTags(tags).map((tag) => {
+        const color = TAG_COLORS[tag] ?? FALLBACK_TAG;
+        return (
+          <span
+            key={tag}
+            className="text-[0.65rem] font-semibold px-2 py-0.5 rounded-full"
+            style={{
+              background: color.bg,
+              color: color.text,
+              border: `1px solid ${color.border ?? "transparent"}`,
+            }}
+          >
+            {tag}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function LeadCard({ member }: { member: Member }) {
+  const accent = TAG_COLORS[leadTag(member)!] ?? FALLBACK_TAG;
+  return (
+    <div className="fade-in flex flex-col items-center text-center bg-card border border-border rounded-2xl p-7 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1 w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.834rem)]">
+      <Avatar member={member} size="w-24 h-24" ring={accent.border ?? accent.bg} />
+      <h3 className="font-sans text-voltage-primary font-semibold text-lg mt-4 mb-2">
+        {member.name}
+      </h3>
+      <TagChips tags={member.tags} />
+      <p className="text-muted text-sm leading-[1.7] mt-3">{member.bio}</p>
+    </div>
+  );
+}
+
 function MemberCard({ member }: { member: Member }) {
   return (
-    <div className="fade-in bg-card border border-border rounded-2xl p-6 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1">
-      <div className="flex items-center gap-4 mb-4">
-        {/* Avatar */}
-        {member.photo ? (
-          <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
-            <img
-              src={`/photos/${member.photo}`}
-              alt={member.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ) : (
-          <div
-            className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-muted"
-            style={{ background: "var(--bg3)" }}
-          >
-            {member.initials}
-          </div>
-        )}
-
-        <div>
-          <h3 className="font-sans text-voltage-primary font-semibold text-base">
-            {member.name}
-          </h3>
-        </div>
-      </div>
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        {member.tags.map((tag) => {
-          const color = TAG_COLORS[tag] ?? {
-            bg: "rgba(107,127,153,.12)",
-            text: "#6b7f99",
-          };
-          return (
-            <span
-              key={tag}
-              className="text-[0.65rem] font-semibold px-2 py-0.5 rounded-full"
-              style={{ background: color.bg, color: color.text }}
-            >
-              {tag}
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Bio */}
-      <p className="text-muted text-sm leading-[1.7]">{member.bio}</p>
+    <div className="fade-in flex flex-col items-center text-center bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(20%-0.8rem)]">
+      <Avatar member={member} size="w-16 h-16" />
+      <h3 className="font-sans text-voltage-primary font-semibold text-[0.95rem] mt-3 mb-2">
+        {member.name}
+      </h3>
+      <TagChips tags={member.tags} />
+      <p className="text-muted text-[0.8rem] leading-[1.6] mt-3">{member.bio}</p>
     </div>
   );
 }
