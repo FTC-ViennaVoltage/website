@@ -14,13 +14,13 @@ type Member = {
 
 const TAG_COLORS: Record<string, { bg: string; text: string }> = {
   Captain: { bg: "rgba(59,130,246,.12)", text: "#3b82f6" },
-  'Build Captain': { bg: "rgba(16,185,129,.12)", text: "#10b981" },
+  'Build Lead': { bg: "rgba(16,185,129,.12)", text: "#10b981" },
   "Vice Captain": { bg: "rgba(59,130,246,.12)", text: "#3b82f6" },
   Build: { bg: "rgba(16,185,129,.12)", text: "#10b981" },
   Software: { bg: "rgba(139,92,246,.12)", text: "#8b5cf6" },
-  'Software Captain': { bg: "rgba(139,92,246,.12)", text: "#8b5cf6" },
+  'Software Lead': { bg: "rgba(139,92,246,.12)", text: "#8b5cf6" },
   Outreach: { bg: "rgba(236,72,153,.12)", text: "#ec4899" },
-  'Outreach Captain': { bg: "rgba(236,72,153,.12)", text: "#ec4899" },
+  'Outreach Lead': { bg: "rgba(236,72,153,.12)", text: "#ec4899" },
 };
 
 const PLACEHOLDER_BIO =
@@ -58,18 +58,6 @@ const members: Member[] = [
     bio: "TJHSST '29",
   },
   {
-    name: "Joshua L",
-    initials: "JL",
-    tags: ["Vice Captain", "Build", "Outreach"],
-    bio: PLACEHOLDER_BIO,
-  },
-  {
-    name: "Zakhar L",
-    initials: "ZL",
-    tags: ["Build", "Software", "Outreach"],
-    bio: PLACEHOLDER_BIO,
-  },
-  {
     name: "Dalton S",
     photo: "daltonsheng.png",
     tags: ["Build"],
@@ -80,12 +68,6 @@ const members: Member[] = [
     photo: "ethanhahn.webp",
     tags: ["Build"],
     bio: "TJHSST '27",
-  },
-  {
-    name: "Max S",
-    initials: "MS",
-    tags: ["Build"],
-    bio: "Madison '29",
   },
   {
     name: "Adan L",
@@ -134,6 +116,12 @@ const members: Member[] = [
     photo: "robertliu.webp",
     tags: ["Outreach"],
     bio: "Langley '29. I like networking and teaching kids computer science.",
+  },
+  {
+    name: "Ryan I",
+    initials: "RI",
+    tags: ["Outreach"],
+    bio: "TJHSST '29",
   },
 ];
 
