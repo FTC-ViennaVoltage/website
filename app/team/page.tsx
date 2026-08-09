@@ -42,19 +42,19 @@ const members: Member[] = [
   {
     name: "Fionn M",
     photo: "fionnmoloney.webp",
-    tags: ["Build Captain"],
+    tags: ["Build Lead"],
     bio: "Langley '29",
   },
   {
     name: "Karim A",
     photo: "karima.png",
-    tags: ["Software Captain", "Build"],
+    tags: ["Software Lead", "Build"],
     bio: "LHS '29. NVCC '29 CS. Rewrote this entire website from scratch.",
   },
   {
     name: "Essam M",
     initials: "EM",
-    tags: ["Outreach Captain", "Build"],
+    tags: ["Outreach Lead", "Build"],
     bio: "TJHSST '29",
   },
   {
