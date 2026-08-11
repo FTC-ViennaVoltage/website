@@ -88,7 +88,7 @@ const members: Member[] = [
     name: "Essam M",
     initials: "EM",
     tags: ["Outreach Lead", "Build"],
-    bio: "TJHSST '29",
+    bio: "Hey! I'm Essam, I love research, community involvement, and teaching. Additionally, I used to despise pickles, now I like them.",
   },
   {
     name: "Dalton S",
@@ -100,13 +100,13 @@ const members: Member[] = [
     name: "Ethan H",
     photo: "ethanhahn.webp",
     tags: ["Build"],
-    bio: "TJHSST '27",
+    bio: "I like doing anything engineering related especially CAD.",
   },
   {
     name: "Adan L",
     photo: "adanli.webp",
     tags: ["Build"],
-    bio: "Langley '29. I transferred from Kilmer Middle School to Langley. I love to travel across the country to perform martial arts.",
+    bio: "Langley 2029 + Langley SciOly 25-26 Season. I like aerospace and I do martial arts.",
   },
   {
     name: "Joseph B",
