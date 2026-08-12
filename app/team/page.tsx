@@ -130,7 +130,7 @@ const members: Member[] = [
     name: "Caden O",
     initials: "CO",
     tags: ["Software"],
-    bio: "Langley '28",
+    bio: "Langley '28. I have a deep passion for problem solving across STEM and life as a whole.",
   },
   {
     name: "Leo W",
