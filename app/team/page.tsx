@@ -118,7 +118,7 @@ const members: Member[] = [
     name: "Bryan T",
     photo: "bryantan.webp",
     tags: ["Build"],
-    bio: "TJHSST '29",
+    bio: "TJ '29. I love learning about STEM and applying my knowledge in the real world. For example, statistically speaking, K-Pop is mid at best. 😉",
   },
   {
     name: "Isaac L",
