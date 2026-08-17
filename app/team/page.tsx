@@ -122,9 +122,9 @@ const members: Member[] = [
   },
   {
     name: "Isaac L",
-    photo: "isaaclin.png",
+    photo: "IL",
     tags: ["Build", "Outreach"],
-    bio: "Langley '29. I am also part of Langley's FRC team, and outside of robotics, I like playing tennis.",
+    bio: "Langley '29. I like to spend time with friends and like connecting to new people.",
   },
   {
     name: "Caden O",
@@ -142,7 +142,7 @@ const members: Member[] = [
     name: "Landon Y",
     initials: "LY",
     tags: ["Software"],
-    bio: "TJHSST 29. I like coding and doing competitive math.",
+    bio: "My name is Landon, and I am a rising 10th grade student at TJ. I enjoy robotics and coding.",
   },
   {
     name: "Robert L",
