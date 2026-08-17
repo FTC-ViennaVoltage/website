@@ -122,7 +122,7 @@ const members: Member[] = [
   },
   {
     name: "Isaac L",
-    photo: "IL",
+    initials: "IL",
     tags: ["Build", "Outreach"],
     bio: "Langley '29. I like to spend time with friends and like connecting to new people.",
   },
