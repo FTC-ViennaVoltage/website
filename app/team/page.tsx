@@ -109,22 +109,10 @@ const members: Member[] = [
     bio: "Langley 2029 + Langley SciOly 25-26 Season. I like aerospace and I do martial arts.",
   },
   {
-    name: "Joseph B",
-    photo: "josephbobek.webp",
-    tags: ["Build"],
-    bio: "Langley '29. I am part of Langley FRC's build team in addition to FTC. I also do competitive wrestling.",
-  },
-  {
     name: "Bryan T",
     photo: "bryantan.webp",
     tags: ["Build"],
     bio: "TJ '29. I love learning about STEM and applying my knowledge in the real world. For example, statistically speaking, K-Pop is mid at best. 😉",
-  },
-  {
-    name: "Isaac L",
-    initials: "IL",
-    tags: ["Build", "Outreach"],
-    bio: "Langley '29. I like to spend time with friends and like connecting to new people.",
   },
   {
     name: "Caden O",
@@ -133,22 +121,10 @@ const members: Member[] = [
     bio: "Langley '28. I have a deep passion for problem solving across STEM and life as a whole.",
   },
   {
-    name: "Leo W",
-    photo: "leowang.png",
-    tags: ["Software"],
-    bio: "Langley '2029. I like math and computer science.",
-  },
-  {
     name: "Landon Y",
     initials: "LY",
     tags: ["Software"],
     bio: "My name is Landon, and I am a rising 10th grade student at TJ. I enjoy robotics and coding.",
-  },
-  {
-    name: "Robert L",
-    photo: "robertliu.webp",
-    tags: ["Outreach"],
-    bio: "Langley '29. I like networking and teaching kids computer science.",
   },
   {
     name: "Ryan I",
