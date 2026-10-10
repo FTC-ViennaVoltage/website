@@ -141,7 +141,7 @@ const members: Member[] = [
   {
     name: "Brandon Q",
     initials: "BQ",
-    tags: ["Build"],
+    tags: ["Outreach"],
     bio: "TJHSST '29"
   },
   {
