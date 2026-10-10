@@ -132,6 +132,24 @@ const members: Member[] = [
     tags: ["Outreach"],
     bio: "TJHSST '29",
   },
+  {
+    name: "Alex W",
+    initials: "AW",
+    tags: ["Build"],
+    bio: "McLean '30"
+  },
+  {
+    name: "Brandon Q",
+    initials: "BQ",
+    tags: ["Build"],
+    bio: "TJHSST '29"
+  },
+  {
+    name: "Benjamin W",
+    initials: "BW",
+    tags: ["Software"],
+    bio: "TJHSST '29"
+  },
 ];
 
 type Advisor = {
