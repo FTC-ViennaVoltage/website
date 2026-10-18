@@ -8,6 +8,8 @@ type Sponsor = {
   url: string;
   /* Path under public/. Until the file exists the tile shows the name instead. */
   logo?: string;
+  /* Fills the tile around a logo that doesn't match its shape */
+  logoBg?: string;
   blurb: string;
 };
 
@@ -18,7 +20,9 @@ const SPONSORS: Record<string, Sponsor[]> = {
       name: "Sunshine Academy",
       url: "https://sunshine-academy.org/",
       logo: "/sponsors/sunshine-academy.png",
-      blurb: "Thank you to Sunshine Academy for supporting Vienna Voltage as a Silver sponsor.",
+      logoBg: "#fdce05",
+      blurb:
+        "Sunshine Academy offers classes for grades 1–12 in reading, writing, critical thinking and competition math, from MathCounts to AMC.",
     },
   ],
 };
@@ -185,13 +189,18 @@ function SponsorTile({ sponsor }: { sponsor: Sponsor }) {
       rel="noopener noreferrer"
       className="group block"
     >
-      <div className="aspect-[3/2] bg-white flex items-center justify-center p-4 overflow-hidden photo-frame">
+      <div
+        className={`aspect-[3/2] bg-white flex items-center justify-center overflow-hidden photo-frame ${
+          hasFile(sponsor.logo) && sponsor.logoBg ? "" : "p-4"
+        }`}
+        style={hasFile(sponsor.logo) && sponsor.logoBg ? { background: sponsor.logoBg } : undefined}
+      >
         {hasFile(sponsor.logo) ? (
           <img
             src={sponsor.logo}
             alt={`${sponsor.name} logo`}
             loading="lazy"
-            className="max-w-full max-h-full object-contain photo !bg-transparent !object-contain"
+            className="photo !object-contain !bg-transparent"
           />
         ) : (
           <span className="t-lead font-extrabold tracking-[-0.03em] text-center leading-tight">
