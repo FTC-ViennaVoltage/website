@@ -145,13 +145,13 @@ type Advisor = {
 const advisors: Advisor[] = [
   {
     name: "Jing Feng",
-    role: "Team Mentor",
-    bio: "Harry's mom. Will help guide the team through the logistics.",
+    role: "Team Coach",
+    bio: "Will help guide the team through the logistics and registration. Also helps with connections.",
   },
   {
-    name: "Faculty Advisor",
-    role: "Advisor",
-    bio: PLACEHOLDER_BIO,
+    name: "Wenxue Yu",
+    role: "Technical Coach",
+    bio: "Coaches the team technically through design, strategy, and code.",
   },
 ];
 
