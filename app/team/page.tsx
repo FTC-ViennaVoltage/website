@@ -106,7 +106,7 @@ const members: Member[] = [
   },
   {
     name: "Landon Y",
-    initials: "LY",
+    photo: "landon.png",
     tags: ["Software"],
     bio: "My name is Landon, and I am a rising 10th grade student at TJ. I enjoy robotics and coding.",
   },
