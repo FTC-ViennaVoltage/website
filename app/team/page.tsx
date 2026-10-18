@@ -96,7 +96,7 @@ const members: Member[] = [
     name: "Alex W",
     photo: "alex.png",
     tags: ["Build"],
-    bio: "McLean '30"
+    bio: "McLean '30. I like to CAD a lot."
   },
   {
     name: "Bryan T",
