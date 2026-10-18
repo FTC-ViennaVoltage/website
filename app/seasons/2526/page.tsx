@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import IterationExplorer from "@/components/iteration-explorer";
+import DragRow from "@/components/drag-row";
 
 /* ─── Competition Data (DECODE 2025-26) ──────────────────────────────── */
 
@@ -154,6 +155,7 @@ const SECTIONS = [
   ["competitions", "Competitions"],
   ["awards", "Awards"],
   ["outreach", "Outreach"],
+  ["gallery", "Photos"],
   ["teampic", "Team photo"],
 ] as const;
 
@@ -169,6 +171,7 @@ export default function Season2526() {
       <CompetitionsSection />
       <AwardsSection />
       <OutreachSection />
+      <GallerySection />
       <TeamPhotoSection />
     </>
   );
@@ -579,6 +582,72 @@ function OutreachSection() {
           </article>
         ))}
       </div>
+    </section>
+  );
+}
+
+/* ─── Photos: a drag row of mixed modules ──────────────────────────── */
+
+type Shot = { src: string; alt: string; w: number; h: number; contain?: boolean };
+
+const SHOTS: Record<string, Shot> = {
+  robot: { src: "/season/2526/finalrobot.webp", alt: "The finished DECODE robot", w: 548, h: 588 },
+  drivetrain: { src: "/season/2526/drivetrain.webp", alt: "Mecanum drivetrain during wiring", w: 456, h: 430 },
+  intake: { src: "/season/2526/intake.webp", alt: "Intake prototype on the build table", w: 562, h: 430 },
+  claw: { src: "/season/2526/claw4.webp", alt: "CAD render of the final claw", w: 372, h: 232, contain: true },
+  intake4: { src: "/season/2526/intake4.webp", alt: "CAD render of the final intake", w: 280, h: 232, contain: true },
+  steam: { src: "/season/2526/stemnight.jpg", alt: "Demonstrating the robot at STEAM night", w: 1067, h: 800 },
+  java: { src: "/season/2526/java.webp", alt: "Teaching Java at Herbert Hoover Middle School", w: 1196, h: 1008 },
+  churchill: { src: "/season/2526/churchill.jpg", alt: "Churchill Road Elementary, where we coach two FLL teams", w: 650, h: 433 },
+};
+
+function Img({ s }: { s: Shot }) {
+  return (
+    <div className={`photo-frame h-full ${s.contain ? "bg-white" : ""}`}>
+      <img
+        src={s.src}
+        alt={s.alt}
+        width={s.w}
+        height={s.h}
+        loading="lazy"
+        draggable={false}
+        className={s.contain ? "w-full h-full object-contain p-6" : "photo"}
+      />
+    </div>
+  );
+}
+
+function GallerySection() {
+  const tall = "shrink-0 h-full aspect-[3/4] w-auto max-md:w-[72vw] max-md:aspect-auto";
+  const pair = "shrink-0 h-full grid grid-rows-2 gap-2 md:gap-3 w-[calc(68svh*0.66)] max-md:w-[64vw]";
+  const wide = "shrink-0 h-full aspect-[16/10] w-auto max-md:w-[88vw] max-md:aspect-auto";
+
+  return (
+    <section id="gallery" className="pb-[var(--section)]">
+      <div className="wrap flex items-baseline justify-between mb-8">
+        <h2 className="t-head" data-reveal>
+          From the build season
+        </h2>
+        <p className="text-muted tabular shrink-0" data-reveal>
+          8 pictures
+        </p>
+      </div>
+      <DragRow label="Photographs from the 2025–26 season" className="pl-[var(--margin)] md:pl-[6vw]">
+        <div className="flex gap-2 md:gap-3 h-[62svh] md:h-[68svh] pr-[var(--margin)] w-max">
+          <div className={tall}><Img s={SHOTS.robot} /></div>
+          <div className={pair}>
+            <Img s={SHOTS.drivetrain} />
+            <Img s={SHOTS.intake} />
+          </div>
+          <div className={pair}>
+            <Img s={SHOTS.claw} />
+            <Img s={SHOTS.intake4} />
+          </div>
+          <div className={tall}><Img s={SHOTS.steam} /></div>
+          <div className={wide}><Img s={SHOTS.java} /></div>
+          <div className={tall}><Img s={SHOTS.churchill} /></div>
+        </div>
+      </DragRow>
     </section>
   );
 }
