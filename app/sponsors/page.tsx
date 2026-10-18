@@ -1,4 +1,30 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 const MAIL = "mailto:ftcviennavoltage@gmail.com?subject=Sponsoring%20Vienna%20Voltage";
+
+type Sponsor = {
+  name: string;
+  url: string;
+  /* Path under public/. Until the file exists the tile shows the name instead. */
+  logo?: string;
+  blurb: string;
+};
+
+/* Current sponsors, keyed by tier name. Each one fills an open spot. */
+const SPONSORS: Record<string, Sponsor[]> = {
+  Silver: [
+    {
+      name: "Sunshine Academy",
+      url: "https://sunshine-academy.org/",
+      logo: "/sponsors/sunshine-academy.png",
+      blurb: "Thank you to Sunshine Academy for supporting Vienna Voltage as a Silver sponsor.",
+    },
+  ],
+};
+
+const hasFile = (publicPath?: string) =>
+  !!publicPath && existsSync(join(process.cwd(), "public", publicPath));
 
 const TIERS = [
   {
@@ -47,8 +73,8 @@ export default function SponsorsPage() {
         <div className="wrap grid12 gap-y-8 pt-[clamp(64px,14vh,160px)] pb-[clamp(56px,10vh,120px)] items-end">
           <p className="left-zone t-body measure after-lines order-2 min-[900px]:order-1">
             Vienna Voltage is made possible by individuals, businesses and
-            organizations who want more students building robots. Your name
-            could be the first one here.
+            organizations who want more students building robots. Thank you
+            to everyone who backs our season.
           </p>
           <h1 className="on-axis t-display lines order-1 min-[900px]:order-2">
             <span className="line">
@@ -72,7 +98,14 @@ export default function SponsorsPage() {
                   tier.slots === 2 ? "grid-cols-2" : tier.slots === 3 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-4"
                 }`}
               >
-                {Array.from({ length: tier.slots }).map((_, i) => (
+                {(SPONSORS[tier.name] ?? []).map((sponsor) => (
+                  <li key={sponsor.name}>
+                    <SponsorTile sponsor={sponsor} />
+                  </li>
+                ))}
+                {Array.from({
+                  length: Math.max(0, tier.slots - (SPONSORS[tier.name]?.length ?? 0)),
+                }).map((_, i) => (
                   <li key={i}>
                     <a
                       href={MAIL}
@@ -142,3 +175,36 @@ export default function SponsorsPage() {
     </>
   );
 }
+
+function SponsorTile({ sponsor }: { sponsor: Sponsor }) {
+  const host = new URL(sponsor.url).hostname.replace(/^www\./, "");
+  return (
+    <a
+      href={sponsor.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block"
+    >
+      <div className="aspect-[3/2] bg-white flex items-center justify-center p-4 overflow-hidden photo-frame">
+        {hasFile(sponsor.logo) ? (
+          <img
+            src={sponsor.logo}
+            alt={`${sponsor.name} logo`}
+            loading="lazy"
+            className="max-w-full max-h-full object-contain photo !bg-transparent !object-contain"
+          />
+        ) : (
+          <span className="t-lead font-extrabold tracking-[-0.03em] text-center leading-tight">
+            {sponsor.name}
+          </span>
+        )}
+      </div>
+      <p className="font-semibold mt-3 underline decoration-2 underline-offset-4 decoration-transparent group-hover:decoration-yellow transition-[text-decoration-color] duration-200">
+        {sponsor.name} <span className="arrow">→</span>
+      </p>
+      <p className="t-small text-muted">{host}</p>
+      <p className="t-small mt-1">{sponsor.blurb}</p>
+    </a>
+  );
+}
+
