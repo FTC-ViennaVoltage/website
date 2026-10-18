@@ -126,7 +126,7 @@ const members: Member[] = [
     name: "Ryan I",
     photo: "ryan.png",
     tags: ["Outreach"],
-    bio: "TJHSST '29",
+    bio: "TJHSST '29. I like networking with others and participating in STEM-related activities.",
   },
   {
     name: "Brandon Q",
