@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState } from "react";
+import Link from "next/link";
 
 /* ─── Data ────────────────────────────────────────────────────────────── */
 
@@ -11,23 +12,6 @@ type Member = {
   tags: string[];
   bio: string;
 };
-
-type TagStyle = { bg: string; text: string; border?: string };
-
-/* One color family per subteam; the subteam's lead gets a brighter
-   shade, a stronger tint, and an outlined chip. Team leadership is gold. */
-const TAG_COLORS: Record<string, TagStyle> = {
-  Captain: { bg: "rgba(251,191,36,.18)", text: "#fcd34d", border: "rgba(251,191,36,.45)" },
-  "Vice Captain": { bg: "rgba(251,191,36,.10)", text: "#fbbf24", border: "rgba(251,191,36,.28)" },
-  "Build Lead": { bg: "rgba(52,211,153,.16)", text: "#6ee7b7", border: "rgba(52,211,153,.45)" },
-  Build: { bg: "rgba(52,211,153,.10)", text: "#34d399" },
-  "Software Lead": { bg: "rgba(167,139,250,.16)", text: "#c4b5fd", border: "rgba(167,139,250,.45)" },
-  Software: { bg: "rgba(167,139,250,.10)", text: "#a78bfa" },
-  "Outreach Lead": { bg: "rgba(244,114,182,.16)", text: "#f9a8d4", border: "rgba(244,114,182,.45)" },
-  Outreach: { bg: "rgba(244,114,182,.10)", text: "#f472b6" },
-};
-
-const FALLBACK_TAG: TagStyle = { bg: "rgba(107,127,153,.12)", text: "#6b7f99" };
 
 /* Leadership tags first, then subteams — controls chip order and lead sorting */
 const TAG_ORDER = [
@@ -53,7 +37,7 @@ const sortTags = (tags: string[]) =>
 
 const isLead = (m: Member) => m.tags.some((t) => LEAD_TAGS.has(t));
 
-/* The lead's highest-ranking leadership tag — used for card accents */
+/* The lead's highest-ranking leadership tag — sorts the leadership list */
 const leadTag = (m: Member) => sortTags(m.tags).find((t) => LEAD_TAGS.has(t));
 
 const PLACEHOLDER_BIO =
@@ -171,239 +155,203 @@ const advisors: Advisor[] = [
   },
 ];
 
+/* Subteam filter: a lead counts toward the subteam they lead */
+const SUBTEAMS = ["Build", "Software", "Outreach"] as const;
+type Filter = "Everyone" | (typeof SUBTEAMS)[number];
+
+const inSubteam = (m: Member, f: Filter) =>
+  f === "Everyone" ||
+  m.tags.some((t) => t === f || t === `${f} Lead`) ||
+  m.tags.includes("Captain");
 
 export default function TeamPage() {
-  return (
-    <>
-      <HeroSection />
-      <Divider />
-      <MembersSection />
-      <Divider />
-      <AdvisorsSection />
-    </>
-  );
-}
-
-
-function HeroSection() {
-  return (
-    <section
-      className="pt-40 pb-20 px-6 text-center border-b border-border"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,.08) 0%, transparent 70%)",
-      }}
-    >
-      <p className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-accent mb-4">
-        The people behind the robot
-      </p>
-      <h1 className="font-sans text-[clamp(2.4rem,5vw,3.6rem)] font-bold text-voltage-primary tracking-tight mb-5">
-        Meet the Team
-      </h1>
-      <p className="max-w-[640px] mx-auto text-muted leading-[1.8] text-base">
-        Vienna Voltage is made up of multiple high school students from the DMV
-        who are passionate about robotics and aspire to do their best when it
-        comes to being part of the team.
-      </p>
-    </section>
-  );
-}
-
-/* ─── Members ─────────────────────────────────────────────────────────── */
-
-function MembersSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const els = sectionRef.current?.querySelectorAll(".fade-in");
-    if (!els) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.1 }
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const [filter, setFilter] = useState<Filter>("Everyone");
 
   const leads = members
     .filter(isLead)
     .sort((a, b) => tagRank(leadTag(a)!) - tagRank(leadTag(b)!));
   const rest = members.filter((m) => !isLead(m));
+  const shownLeads = leads.filter((m) => inSubteam(m, filter));
+  const shownRest = rest.filter((m) => inSubteam(m, filter));
 
   return (
-    <section ref={sectionRef} className="py-24 px-6">
-      <div className="max-w-[1200px] mx-auto">
-        <p className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-accent mb-3 text-center fade-in">
-          Team Members
+    <>
+      <Hero />
+
+      <section className="section !pb-0" aria-labelledby="roster">
+        <div className="wrap grid12 gap-y-8 items-end">
+          <h2 id="roster" className="col-span-12 md:col-span-5 t-head" data-reveal>
+            {members.length} students
+          </h2>
+          <div className="col-span-12 md:col-start-6 md:col-span-7" data-reveal>
+            <p className="t-small text-muted mb-2">Show</p>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by subteam">
+              {(["Everyone", ...SUBTEAMS] as Filter[]).map((f) => {
+                const n = members.filter((m) => inSubteam(m, f)).length;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setFilter(f)}
+                    aria-pressed={filter === f}
+                    className={`min-h-[44px] px-4 font-semibold transition-colors duration-200 ${
+                      filter === f ? "bg-navy text-navy-ink" : "bg-surface hover:bg-yellow"
+                    }`}
+                  >
+                    {f} <span className="tabular opacity-70">{n}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pt-16" aria-labelledby="leadership">
+        <div className="wrap grid12 mb-8">
+          <h3 id="leadership" className="on-axis t-lead font-semibold">
+            Leadership
+          </h3>
+        </div>
+        <ul className="wrap grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-[var(--gutter)] gap-y-12">
+          {shownLeads.map((m) => (
+            <li key={m.name} className="panel-in">
+              <Portrait member={m} />
+              <p className="t-lead font-semibold mt-4">{m.name}</p>
+              <Roles tags={m.tags} />
+              <p className="mt-3 text-muted">{m.bio}</p>
+            </li>
+          ))}
+        </ul>
+        {shownLeads.length === 0 && (
+          <p className="wrap text-muted">No leads in this subteam.</p>
+        )}
+      </section>
+
+      <section className="pt-24 pb-[var(--section)]" aria-labelledby="members">
+        <div className="wrap grid12 mb-8">
+          <h3 id="members" className="on-axis t-lead font-semibold">
+            Members
+          </h3>
+        </div>
+        <ul className="wrap grid12 gap-y-2">
+          {shownRest.map((m) => (
+            <li
+              key={m.name}
+              className="col-span-12 grid grid-cols-[64px_1fr] md:grid-cols-[subgrid] md:col-span-12 gap-x-[var(--gutter)] items-center bg-surface/60 hover:bg-surface transition-colors duration-200 p-3 md:p-0 md:pr-4 panel-in"
+            >
+              <div className="md:col-span-1 w-16 h-16 md:w-20 md:h-20 overflow-hidden">
+                <Portrait member={m} small />
+              </div>
+              <div className="md:col-span-4 md:pl-2">
+                <p className="font-semibold">{m.name}</p>
+                <Roles tags={m.tags} />
+              </div>
+              <p className="col-span-2 md:col-start-6 md:col-span-7 text-muted mt-2 md:mt-0 md:py-4">
+                {m.bio}
+              </p>
+            </li>
+          ))}
+        </ul>
+        {shownRest.length === 0 && (
+          <p className="wrap text-muted">No members in this subteam.</p>
+        )}
+      </section>
+
+      <Advisors />
+    </>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="pt-[72px]">
+      <div className="wrap grid12 gap-y-8 pt-[clamp(64px,12vh,140px)] pb-12 items-end">
+        <p className="left-zone t-body measure after-lines order-2 min-[900px]:order-1">
+          High school students from across the DMV who design, build, code and
+          teach together. Every one of them is on at least one subteam: build,
+          software or outreach.
         </p>
-
-        <h3 className="fade-in text-center text-sm font-semibold tracking-[0.1em] uppercase text-muted mt-12 mb-6">
-          Leadership
-        </h3>
-        <div className="flex flex-wrap justify-center gap-5">
-          {leads.map((member) => (
-            <LeadCard key={member.name} member={member} />
-          ))}
-        </div>
-
-        <h3 className="fade-in text-center text-sm font-semibold tracking-[0.1em] uppercase text-muted mt-14 mb-6">
-          Members
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {rest.map((member) => (
-            <MemberCard key={member.name} member={member} />
-          ))}
-        </div>
+        <h1 className="on-axis t-display lines order-1 min-[900px]:order-2">
+          <span className="line">
+            <span data-line style={{ "--i": 0 } as React.CSSProperties}>
+              Meet the team
+            </span>
+          </span>
+        </h1>
+      </div>
+      <div className="h-[42svh] md:h-[62svh] overflow-hidden">
+        <img
+          src="/season/2526/teampic.webp"
+          alt="The Vienna Voltage team with our 2025–26 robot"
+          width={1736}
+          height={1302}
+          className="photo drift object-[50%_40%]"
+        />
       </div>
     </section>
   );
 }
 
-function Avatar({ member, size, ring }: { member: Member; size: string; ring?: string }) {
-  const ringStyle = ring ? { boxShadow: `0 0 0 3px ${ring}` } : undefined;
+function Portrait({ member, small }: { member: Member; small?: boolean }) {
   return member.photo ? (
-    <div className={`${size} rounded-full overflow-hidden flex-shrink-0`} style={ringStyle}>
+    <div className={`${small ? "w-full h-full" : "aspect-[4/5]"} overflow-hidden bg-surface photo-frame`}>
       <img
         src={`/photos/${member.photo}`}
         alt={member.name}
-        className="w-full h-full object-cover"
+        loading="lazy"
+        className="photo"
       />
     </div>
   ) : (
     <div
-      className={`${size} rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-muted`}
-      style={{ background: "var(--bg3)", ...ringStyle }}
+      className={`${small ? "w-full h-full" : "aspect-[4/5]"} bg-navy text-yellow flex items-end p-3`}
+      aria-hidden
     >
-      {member.initials}
+      <span className={`font-extrabold tracking-[-0.05em] leading-none ${small ? "t-body" : "t-head"}`}>
+        {member.initials}
+      </span>
     </div>
   );
 }
 
-function TagChips({ tags }: { tags: string[] }) {
+function Roles({ tags }: { tags: string[] }) {
+  const sorted = sortTags(tags);
   return (
-    <div className="flex flex-wrap justify-center gap-1.5">
-      {sortTags(tags).map((tag) => {
-        const color = TAG_COLORS[tag] ?? FALLBACK_TAG;
-        return (
-          <span
-            key={tag}
-            className="text-[0.65rem] font-semibold px-2 py-0.5 rounded-full"
-            style={{
-              background: color.bg,
-              color: color.text,
-              border: `1px solid ${color.border ?? "transparent"}`,
-            }}
-          >
-            {tag}
-          </span>
-        );
-      })}
-    </div>
+    <p className="t-small">
+      {sorted.map((t, i) => (
+        <span key={t} className={LEAD_TAGS.has(t) ? "font-semibold" : "text-muted"}>
+          {t}
+          {i < sorted.length - 1 ? " · " : ""}
+        </span>
+      ))}
+    </p>
   );
 }
 
-function LeadCard({ member }: { member: Member }) {
-  const accent = TAG_COLORS[leadTag(member)!] ?? FALLBACK_TAG;
+function Advisors() {
   return (
-    <div className="fade-in flex flex-col items-center text-center bg-card border border-border rounded-2xl p-7 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1 w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.834rem)]">
-      <Avatar member={member} size="w-24 h-24" ring={accent.border ?? accent.bg} />
-      <h3 className="font-sans text-voltage-primary font-semibold text-lg mt-4 mb-2">
-        {member.name}
-      </h3>
-      <TagChips tags={member.tags} />
-      <p className="text-muted text-sm leading-[1.7] mt-3">{member.bio}</p>
-    </div>
-  );
-}
-
-function MemberCard({ member }: { member: Member }) {
-  return (
-    <div className="fade-in flex flex-col items-center text-center bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(20%-0.8rem)]">
-      <Avatar member={member} size="w-16 h-16" />
-      <h3 className="font-sans text-voltage-primary font-semibold text-[0.95rem] mt-3 mb-2">
-        {member.name}
-      </h3>
-      <TagChips tags={member.tags} />
-      <p className="text-muted text-[0.8rem] leading-[1.6] mt-3">{member.bio}</p>
-    </div>
-  );
-}
-
-/* ─── Advisors ────────────────────────────────────────────────────────── */
-
-function AdvisorsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const els = sectionRef.current?.querySelectorAll(".fade-in");
-    if (!els) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.15 }
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      className="py-24 px-6"
-      style={{ background: "var(--bg2)" }}
-    >
-      <div className="max-w-[1200px] mx-auto">
-        <p className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-accent mb-3 text-center fade-in">
-          Mentors &amp; advisors
-        </p>
-        <h2 className="font-sans text-[clamp(2rem,4vw,2.8rem)] font-bold text-voltage-primary tracking-tight text-center mb-12 fade-in">
+    <section className="section bg-surface">
+      <div className="wrap grid12 gap-y-10">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>
           Who guides us
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[800px] mx-auto">
-          {advisors.map((advisor, i) => (
-            <div
-              key={i}
-              className="fade-in flex items-start gap-4 bg-card border border-border rounded-2xl p-6 transition-all duration-300 hover:border-[rgba(59,130,246,.35)]"
-            >
-              {/* Avatar */}
-              <div
-                className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 text-lg font-bold text-muted"
-                style={{ background: "var(--bg3)" }}
-              >
-                ?
-              </div>
-
-              <div>
-                <h3 className="font-sans text-voltage-primary font-semibold text-base">
-                  {advisor.name}
-                </h3>
-                <p className="text-accent text-[0.75rem] font-medium mb-2">
-                  {advisor.role}
-                </p>
-                <p className="text-muted text-sm leading-[1.7]">
-                  {advisor.bio}
-                </p>
-              </div>
-            </div>
+        <ul className="col-span-12 md:col-start-6 md:col-span-7 grid gap-10 md:grid-cols-2">
+          {advisors.map((a, i) => (
+            <li key={i} data-reveal>
+              <p className="t-lead font-semibold">{a.name}</p>
+              <p className="t-small text-muted">{a.role}</p>
+              <p className="mt-3">{a.bio}</p>
+            </li>
           ))}
-        </div>
+        </ul>
+        <p className="col-span-12 md:col-start-6 md:col-span-7" data-reveal>
+          Want to mentor or advise the team?{" "}
+          <Link href="/get-involved" className="link">
+            Get in touch <span className="arrow">→</span>
+          </Link>
+        </p>
       </div>
     </section>
-  );
-}
-
-/* ─── Divider ─────────────────────────────────────────────────────────── */
-
-function Divider() {
-  return (
-    <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
   );
 }

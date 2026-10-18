@@ -1,96 +1,382 @@
 @import "tailwindcss";
 
+/*
+  Vienna Voltage — house style.
+  Paper ground, one navy ink, team blue for actions, high-voltage yellow and
+  navy as whole fields of colour. One 12-column grid; headings start on the
+  axis at column 6 (about 42% across).
+*/
+
 :root {
-  --background: #080d14;
-  --foreground: #e8edf4;
-  --bg: #080d14;
-  --bg2: #0d1520;
-  --bg3: #111c2b;
-  --blue: #3b82f6;
-  --blue2: #60a5fa;
-  --blue3: #1d4ed8;
-  --text: #e8edf4;
-  --muted: #6b7f99;
-  --border: rgba(59,130,246,.18);
-  --card: rgba(255,255,255,.04);
+  --bg: #f3f5f8;
+  --surface: #e4e9f0;
+  --ink: #0b1b36;
+  --muted: #3e4f6b;
+  --accent: #1d4ed8;
+  --accent-hover: #163fb3;
+  --accent-ink: #ffffff;
+  --field-navy: #0b1b36;
+  --field-navy-ink: #f3f5f8;
+  --field-navy-soft: #a9b8d0;
+  --field-yellow: #ffd200;
+  --field-yellow-ink: #0b1b36;
+  --field-blue: #1d4ed8;
+  --field-blue-ink: #ffffff;
+  --win: #0f6b45;
+  --loss: #a1262b;
+
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+
+  --margin: 24px;
+  --gutter: 20px;
+  --section: clamp(96px, 12vw, 180px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --margin: 40px;
+    --gutter: 24px;
+  }
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-space-sans);
-  --color-nav-bg: rgba(8,13,20,.95);
-  --color-voltage-primary: #e8edf4;
-  --color-voltage-bg: #0d1520;
-  --color-voltage-bg2: #111c2b;
-  --color-muted: #6b7f99;
-  --color-accent: #3b82f6;
-  --color-accent-light: #60a5fa;
-  --color-accent-dark: #1d4ed8;
-  --color-card: rgba(255,255,255,.04);
-  --color-border: rgba(59,130,246,.18);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-navy: var(--field-navy);
+  --color-navy-ink: var(--field-navy-ink);
+  --color-navy-soft: var(--field-navy-soft);
+  --color-yellow: var(--field-yellow);
+  --color-blue: var(--field-blue);
+  --color-win: var(--win);
+  --color-loss: var(--loss);
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-padding-top: 88px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--step-body);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Hero animations */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+::selection {
+  background: var(--field-yellow);
+  color: var(--field-yellow-ink);
 }
 
-@keyframes arc {
-  0%, 100% { opacity: 0.3; transform: scaleX(0.6); }
-  50% { opacity: 1; transform: scaleX(1); }
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
 }
 
-@keyframes scrollline {
-  0% { opacity: 0; transform: translateY(-10px); }
-  50% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(10px); }
+img {
+  display: block;
+  max-width: 100%;
 }
 
-/* Fade-in on scroll utility */
-.fade-in {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+/* ─── Type ─────────────────────────────────────────────────────────── */
+
+.t-display {
+  font-size: 11vw;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.93;
 }
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+@media (min-width: 900px) {
+  .t-display {
+    font-size: min(calc(7.2vw - 8px), 100px);
+  }
+}
+.t-head {
+  font-size: var(--step-head);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+.t-lead {
+  font-size: var(--step-lead);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.t-body {
+  font-size: var(--step-body);
+  line-height: 1.45;
+}
+.t-small {
+  font-size: var(--step-small);
+  line-height: 1.4;
+}
+.measure {
+  max-width: 38ch;
+}
+.measure-wide {
+  max-width: 60ch;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
 }
 
-/* Mission card reveal */
-.card-reveal {
-  opacity: 0;
-  transform: translateY(60px);
-  transition: all 0.8s ease;
+/* ─── Grid ─────────────────────────────────────────────────────────── */
+
+@utility wrap {
+  padding-left: var(--margin);
+  padding-right: var(--margin);
 }
-.card-reveal.show {
-  opacity: 1;
-  transform: translateY(0);
+@utility grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+/* The axis: column 6 onwards on wide screens, the left margin on phones. */
+.on-axis {
+  grid-column: 1 / -1;
+}
+.left-zone {
+  grid-column: 1 / -1;
+}
+@media (min-width: 900px) {
+  .on-axis {
+    grid-column: 6 / -1;
+  }
+  .left-zone {
+    grid-column: 1 / 5;
+  }
 }
 
-/* Scrolly panel transitions */
-.m-panel {
-  opacity: 0;
-  transform: translateY(34px) scale(0.98);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-.m-panel.active {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
+.section {
+  padding-top: var(--section);
+  padding-bottom: var(--section);
 }
 
-/* Progress bar fill transition */
-.scrolly-progress-fill {
-  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+/* ─── Controls ─────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0 1.4rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: var(--step-body);
+  letter-spacing: -0.01em;
+  transition: background-color 180ms ease, transform 180ms var(--ease-out);
+}
+.btn:hover {
+  background: var(--accent-hover);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+.btn-light {
+  background: var(--field-navy-ink);
+  color: var(--ink);
+}
+.btn-light:hover {
+  background: var(--field-yellow);
+}
+.btn-yellow {
+  background: var(--field-yellow);
+  color: var(--field-yellow-ink);
+}
+.btn-yellow:hover {
+  background: #ffe04d;
+}
+
+.link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 180ms ease, color 180ms ease;
+}
+.link:hover {
+  text-decoration-color: var(--field-yellow);
+}
+.link-bar {
+  text-decoration: underline;
+  text-decoration-thickness: 4px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--field-yellow);
+  transition: text-decoration-color 180ms ease;
+}
+.link-bar:hover {
+  text-decoration-color: currentColor;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 220ms var(--ease-out);
+}
+a:hover .arrow,
+button:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Photographs: square corners, one treatment */
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--surface);
+}
+.photo-frame {
+  overflow: hidden;
+}
+.photo-frame .photo {
+  transition: transform 900ms var(--ease-out);
+}
+a:hover .photo-frame .photo,
+.photo-frame:hover .photo {
+  transform: scale(1.035);
+}
+
+/* Horizontal drag row */
+.drag-row {
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.drag-row::-webkit-scrollbar {
+  display: none;
+}
+.drag-row > * {
+  scroll-snap-align: start;
+}
+
+/* ─── Motion ───────────────────────────────────────────────────────── */
+
+.lines .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.lines [data-line] {
+  display: block;
+}
+
+@keyframes line-up {
+  to {
+    transform: none;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes drift {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .lines [data-line] {
+    transform: translateY(105%);
+    animation: line-up 900ms var(--ease-out) forwards;
+    animation-delay: calc(var(--i, 0) * 110ms + 150ms);
+  }
+  .js .after-lines {
+    opacity: 0;
+    animation: fade-up 700ms var(--ease-out) 520ms forwards;
+  }
+  .drift {
+    animation: drift 14s var(--ease-out) both;
+  }
+
+  /* Reveal on scroll, once. Hidden only when script is running. */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+    transition-delay: calc(var(--d, 0) * 80ms);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .panel-in {
+    animation: panel-in 420ms var(--ease-out) both;
+  }
+}
+
+/* Range slider: a solid 8px bar and a square thumb */
+.vv-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+  --track: var(--surface);
+  --thumb: var(--accent);
+}
+.vv-range-dark {
+  --track: #22365a;
+  --thumb: var(--field-yellow);
+}
+.vv-range::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--track);
+}
+.vv-range::-moz-range-track {
+  height: 8px;
+  background: var(--track);
+}
+.vv-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  background: var(--thumb);
+  border: 0;
+  transition: transform 180ms var(--ease-out);
+}
+.vv-range::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: var(--thumb);
+  border: 0;
+  border-radius: 0;
+}
+.vv-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
 }

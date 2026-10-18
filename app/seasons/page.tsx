@@ -1,192 +1,117 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 export default function SeasonsPage() {
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    const elements = cardsRef.current?.querySelectorAll(".fade-in");
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       {/* Hero */}
-      <section
-        className="relative pt-40 pb-24 text-center border-b border-border"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59,130,246,.08) 0%, transparent 70%)",
-        }}
-      >
-        <p className="text-muted text-sm tracking-widest uppercase mb-4">
-          Vienna Voltage · FTC 27427
-        </p>
-        <h1 className="font-sans text-[3rem] md:text-[4rem] font-bold text-voltage-primary leading-tight">
-          Our Seasons
-        </h1>
-        <p className="text-muted max-w-[620px] mx-auto mt-5 text-lg leading-relaxed">
-          Each season is a new challenge — a new game, a new robot, and a new
-          story. Pick a year to explore the robot, the build log, competition
-          results, and everything in between.
-        </p>
+      <section className="pt-[72px]">
+        <div className="wrap grid12 gap-y-8 pt-[clamp(64px,14vh,160px)] pb-[clamp(56px,10vh,120px)] items-end">
+          <p className="left-zone t-body measure after-lines order-2 min-[900px]:order-1">
+            Each season is a new game, a new robot and a new story. Pick a year
+            to see the robot, the build log, competition results and everything
+            in between.
+          </p>
+          <h1 className="on-axis t-display lines order-1 min-[900px]:order-2">
+            <span className="line">
+              <span data-line style={{ "--i": 0 } as React.CSSProperties}>
+                Our seasons
+              </span>
+            </span>
+          </h1>
+        </div>
       </section>
 
-      {/* Seasons Grid */}
-      <section
-        ref={cardsRef}
-        className="px-8 max-w-[900px] mx-auto"
-        style={{ padding: "80px 32px 120px" }}
+      {/* 2026–27: current season, a field of yellow */}
+      <Link
+        href="/seasons/2627"
+        className="group block bg-yellow text-navy"
+        aria-label="2026–27 season, BIOBUZZ, current season"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* 2026-27 Current Season */}
-          <Link
-            href="/seasons/2627"
-            className="fade-in group relative block rounded-[22px] border border-border overflow-hidden transition-all duration-300 hover:border-[rgba(59,130,246,.5)] hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(59,130,246,.1)]"
-            style={{ background: "var(--bg3)" }}
-          >
-            {/* Inner glow */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background:
-                  "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(59,130,246,.13), transparent 70%)",
-              }}
+        <div className="wrap grid12 gap-y-6 pt-14 pb-14 md:pt-20 md:pb-20 items-end">
+          <div className="col-span-12 md:col-span-7" data-reveal>
+            <h2 className="t-display tabular">2026–27</h2>
+            <p className="font-semibold mt-3">Current season</p>
+          </div>
+          <div className="col-span-12 md:col-start-8 md:col-span-5" data-reveal>
+            <p className="t-head">BIOBUZZ</p>
+            <p className="mt-3 measure">
+              Competitions, awards and rankings will appear here as the season
+              goes.
+            </p>
+            <p className="link mt-6 inline-block">
+              View season <span className="arrow">→</span>
+            </p>
+          </div>
+        </div>
+      </Link>
+
+      {/* 2025–26: last season, photograph and figures */}
+      <Link
+        href="/seasons/2526"
+        className="group block"
+        aria-label="2025–26 season, DECODE"
+      >
+        <div className="grid md:grid-cols-12">
+          <div className="md:col-span-7 aspect-[4/3] md:aspect-auto md:min-h-[78svh] photo-frame">
+            <img
+              src="/season/2526/teampic.webp"
+              alt="The team with our DECODE robot, 2025–26"
+              width={1736}
+              height={1302}
+              loading="lazy"
+              className="photo"
             />
-
-            {/* Content */}
-            <div className="relative z-[1] p-11">
-              {/* Badge */}
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border border-[rgba(52,211,153,.3)] text-[#34d399] bg-[rgba(52,211,153,.1)] mb-5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34d399] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34d399]" />
-                </span>
-                Current Season
-              </span>
-
-              {/* Year */}
-              <h2 className="font-sans text-[3.2rem] font-bold text-voltage-primary leading-none">
-                26<span className="text-accent-light">/</span>27
-              </h2>
-
-              {/* Game */}
-              <p className="text-muted font-medium mt-2">BIOBUZZ</p>
-
-              {/* Stats */}
-              <div className="flex gap-7 border-t border-border pt-6 mt-7">
+          </div>
+          <div className="md:col-span-5 bg-navy text-navy-ink wrap pt-12 pb-12 md:pt-16 md:pb-16 flex flex-col justify-between gap-12">
+            <div data-reveal>
+              <h2 className="t-display tabular">2025–26</h2>
+              <p className="font-semibold text-navy-soft mt-3">Last season</p>
+              <p className="t-head mt-6">DECODE</p>
+            </div>
+            <div data-reveal>
+              <dl className="grid grid-cols-3 gap-[var(--gutter)]">
                 <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Competitions</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <dt className="t-small text-navy-soft">Qualifiers</dt>
+                  <dd className="t-lead font-semibold tabular">2</dd>
                 </div>
                 <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Awards</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <dt className="t-small text-navy-soft">Awards</dt>
+                  <dd className="t-lead font-semibold tabular">2</dd>
                 </div>
                 <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Ranking</p>
-                  <p className="text-voltage-primary font-semibold mt-1">—</p>
+                  <dt className="t-small text-navy-soft">Best rank</dt>
+                  <dd className="t-lead font-semibold tabular">7th</dd>
                 </div>
-              </div>
-
-              {/* CTA */}
-              <p className="text-accent-light mt-7 text-sm font-medium">
-                View season{" "}
-                <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
-                  →
-                </span>
+              </dl>
+              <p className="link mt-8 inline-block">
+                View season <span className="arrow">→</span>
               </p>
             </div>
+          </div>
+        </div>
+      </Link>
 
-            {/* Bottom divider */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #3b82f6, transparent)",
-              }}
-            />
-          </Link>
-
-          {/* 2025-26 Last Season */}
-          <Link
-            href="/seasons/2526"
-            className="fade-in group relative block rounded-[22px] border border-border overflow-hidden transition-all duration-300 hover:border-[rgba(59,130,246,.5)] hover:-translate-y-1.5 hover:shadow-[0_12px_40px_rgba(59,130,246,.1)]"
-            style={{ background: "var(--bg3)" }}
-          >
-            {/* Inner glow */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background:
-                  "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(59,130,246,.13), transparent 70%)",
-              }}
-            />
-
-            {/* Content */}
-            <div className="relative z-[1] p-11">
-              {/* Badge */}
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border border-[rgba(59,130,246,.25)] text-accent bg-[rgba(59,130,246,.1)] mb-5">
-                Last Season
-              </span>
-
-              {/* Year */}
-              <h2 className="font-sans text-[3.2rem] font-bold text-voltage-primary leading-none">
-                25<span className="text-accent-light">/</span>26
-              </h2>
-
-              {/* Game */}
-              <p className="text-muted font-medium mt-2">DECODE</p>
-
-              {/* Stats */}
-              <div className="flex gap-7 border-t border-border pt-6 mt-7">
-                <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Competitions</p>
-                  <p className="text-voltage-primary font-semibold mt-1">2</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Awards</p>
-                  <p className="text-voltage-primary font-semibold mt-1">2</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted uppercase tracking-wide">Ranking</p>
-                  <p className="text-voltage-primary font-semibold mt-1">7 (best)</p>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <p className="text-accent-light mt-7 text-sm font-medium">
-                View season{" "}
-                <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
-                  →
-                </span>
-              </p>
+      {/* A strip from the DECODE season */}
+      <section className="pt-[var(--section)] pb-[var(--section)]">
+        <div className="wrap grid12 gap-y-6 mb-10">
+          <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Inside DECODE</h2>
+          <p className="col-span-12 md:col-start-6 md:col-span-7 measure-wide" data-reveal>
+            The robot, the drivetrain under it, and the classrooms where we
+            spent our outreach hours.{" "}
+            <Link href="/seasons/2526" className="link">The full season <span className="arrow">→</span></Link>
+          </p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          {[
+            { src: "/season/2526/finalrobot.webp", alt: "The finished DECODE robot", w: 548, h: 588 },
+            { src: "/season/2526/drivetrain.webp", alt: "Mecanum drivetrain", w: 456, h: 430 },
+            { src: "/season/2526/java.webp", alt: "Teaching Java at Herbert Hoover Middle School", w: 1196, h: 1008 },
+            { src: "/season/2526/stemnight.jpg", alt: "STEAM night at Kent Gardens Elementary", w: 1067, h: 800 },
+          ].map((p) => (
+            <div key={p.src} className="aspect-square photo-frame" data-reveal>
+              <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" className="photo" />
             </div>
-
-            {/* Bottom divider */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, #3b82f6, transparent)",
-              }}
-            />
-          </Link>
+          ))}
         </div>
       </section>
     </>

@@ -1,17 +1,21 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk } from "next/font/google";
+import { Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
+import Reveal from "@/components/reveal";
 
 export const metadata: Metadata = {
   applicationName: 'Vienna Voltage | FTC 27427',
-  title: 'Vienna Voltage | FTC 27427'
+  title: 'Vienna Voltage | FTC 27427',
+  description:
+    'Vienna Voltage is FIRST Tech Challenge team 27427, a student robotics team from Northern Virginia that builds competition robots and teaches younger students to build their own.',
 };
 
-const space = Space_Grotesk({
-  variable: "--font-space-sans",
+const schibsted = Schibsted_Grotesk({
+  variable: "--font-schibsted",
   subsets: ["latin"],
+  weight: ["400", "600", "800"],
 });
 
 export default function RootLayout({
@@ -22,12 +26,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${space.variable} h-full antialiased`}
+      className={`${schibsted.variable} h-full`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <head>
+        {/* Lets CSS hide reveal-on-scroll content only when script runs */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
+      </head>
+      <body className="min-h-full">
         <Nav />
-        {children}
+        <main className="relative z-[1] bg-bg">{children}</main>
         <Footer />
+        <Reveal />
       </body>
     </html>
   );

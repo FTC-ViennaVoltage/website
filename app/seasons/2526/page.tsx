@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import IterationExplorer from "@/components/iteration-explorer";
 
 /* ─── Competition Data (DECODE 2025-26) ──────────────────────────────── */
 
@@ -29,7 +31,7 @@ const COMPETITIONS = [
     playoffs: true,
     playoffRecord: "2W – 2L",
     allianceRole: "Alliance Captain #5",
-    award: "Control Award 🏆",
+    award: "Control Award",
     awardColor: "#3b82f6",
     qualMatches: [
       { score: 211, result: "W" },
@@ -49,7 +51,6 @@ const COMPETITIONS = [
 
 const AWARDS = [
   {
-    icon: "⚡",
     name: "Innovate Award sponsored by RTX",
     place: "2nd Place",
     event: "Richmond, VA Qualifier I",
@@ -60,7 +61,6 @@ const AWARDS = [
     desc: "Recognized for our iterative engineering design process — going through 4 intake versions and 4 claw versions, documenting each with CAD models in OnShape and thorough pros/cons analysis.",
   },
   {
-    icon: "🎮",
     name: "Control Award",
     place: "Winner",
     event: "Alexandria, VA Qualifier I",
@@ -85,37 +85,31 @@ const TIMELINE = [
 
 const SUBSYSTEMS = [
   {
-    ic: "⚙️",
     name: "Mecanum Drivetrain",
     tag: "Hardware",
     body: "Built a 4-wheel mecanum drivetrain enabling full omnidirectional movement including strafing. Carefully tuned torque ratios through experimentation to balance traversal speed against pushing power on the field.",
   },
   {
-    ic: "🦾",
     name: "Claw Intake — V4",
     tag: "Hardware",
     body: "Went through 4 major claw iterations. V1 had good reach but poor grip. V2 improved hold but was inconsistent. V3 better fit the block. Final V4 is consistent with the intake claw — reliable, with room for improvement on block fit. Spring-loaded 3D-printed fingers with rubber inserts for friction.",
   },
   {
-    ic: "📥",
     name: "Intake Mechanism — V4",
     tag: "Hardware",
     body: "V1 could intake from one orientation but was wide and jammed. V2 fixed width but was one-directional. V3 improved traversal speed. V4 achieved much higher consistency with more control over the intake process, at the cost of slightly slower speed.",
   },
   {
-    ic: "🔄",
     name: "Transfer System — V3",
     tag: "Hardware",
     body: "V1 top-down transfer was very inconsistent. V2 horizontal transfer (new claw design) was much more consistent with fewer moving parts. V3 switched from active roller intake to claw intake, greatly improving size constraints, accuracy, and repeatability.",
   },
   {
-    ic: "⏱️",
     name: "Timing Belt Drive",
     tag: "Hardware",
     body: "To minimize actuators, we used a timing belt system to drive both hex shafts from a single servo. This reduced weight, eliminated failure points, and simplified the intake actuation significantly.",
   },
   {
-    ic: "💻",
     name: "Autonomous & TeleOp",
     tag: "Software",
     body: "Coded wheel control with experimentally determined torque ratios. Developed autonomous routines for consistent field element scoring. Driver controls were refined over the season — the Control Award win at Alexandria recognized our software quality.",
@@ -124,46 +118,57 @@ const SUBSYSTEMS = [
 
 const OUTREACH = [
   {
-    icon: "☕",
     title: "Java Class — Herbert Hoover MS",
     students: "~30 students",
     body: "Taught a Java fundamentals class at Herbert Hoover Middle School to inspire students to join FTC and learn programming basics. Covered variables, loops, and basic OOP concepts relevant to robot code.",
   },
   {
-    icon: "🏫",
     title: "STEAM Night — Kent Gardens ES",
     students: "200+ families",
     body: "Brought our robot to Kent Gardens Elementary School's STEAM night. Demonstrated the robot, answered questions from families and students, and promoted FTC as a pathway for young engineers.",
   },
   {
-    icon: "🤖",
     title: "Coaching FLL Teams — Churchill Road ES",
     students: "2 FLL teams",
     body: "Encouraged Churchill Road Elementary students to start two FIRST LEGO League teams. Guided them through programming, robot design, teamwork, and their first season — helping build the next generation of FIRST competitors.",
   },
 ];
 
+/* The six-step engineering cycle */
+const DESIGN_STEPS = [
+  { title: "Brainstorm", body: "At the start of each meeting, we identify the main problem to solve and create an action plan on a whiteboard. This keeps us focused and consistent throughout the session." },
+  { title: "Sketch", body: "After narrowing down ideas, we make detailed whiteboard sketches with measurements and calculations. These act as the starting point for building prototypes." },
+  { title: "Design", body: "We build prototypes with FTC-legal parts, test them, discuss improvements as a team, then refine in OnShape (CAD) to optimize and ensure precision for competition." },
+  { title: "Assemble", body: "After sketching, we build working models using available parts. We then create a 3D CAD model in OnShape to make it easier to adjust components and achieve the best version." },
+  { title: "Evaluate", body: "We test thoroughly and compare the mechanism to original sketches. As a team we discuss strengths and weaknesses, deciding which parts to keep and which need improvement." },
+  { title: "Iterate", body: "Through multiple targeted iterations we make the design simpler, more reliable, and more versatile. After satisfaction we CAD the final design and integrate with the full robot CAD." },
+];
+
 /* ─── Page ────────────────────────────────────────────────────────────── */
+
+const SECTIONS = [
+  ["robot", "Robot"],
+  ["design", "Design process"],
+  ["subsystems", "Subsystems"],
+  ["timeline", "Build log"],
+  ["competitions", "Competitions"],
+  ["awards", "Awards"],
+  ["outreach", "Outreach"],
+  ["teampic", "Team photo"],
+] as const;
 
 export default function Season2526() {
   return (
     <>
       <HeroSection />
-      <StickyNav />
+      <SectionNav />
       <RobotSection />
-      <Divider />
       <DesignProcessSection />
-      <Divider />
       <SubsystemsSection />
-      <Divider />
       <TimelineSection />
-      <Divider />
       <CompetitionsSection />
-      <Divider />
       <AwardsSection />
-      <Divider />
       <OutreachSection />
-      <Divider />
       <TeamPhotoSection />
     </>
   );
@@ -173,93 +178,89 @@ export default function Season2526() {
 
 function HeroSection() {
   return (
-    <section
-      className="pt-36 pb-16 px-8 text-center border-b border-border"
-      style={{
-        background:
-          "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(29,78,216,.2) 0%, transparent 70%)",
-      }}
-    >
-      <div className="flex items-center justify-center gap-2 mb-5 text-sm">
-        <a href="/seasons" className="text-muted hover:text-accent-light transition-colors">Seasons</a>
-        <span className="text-muted">›</span>
-        <span className="text-voltage-primary font-medium">2025–26</span>
-      </div>
-
-      <p className="text-[0.72rem] font-semibold tracking-[0.14em] uppercase text-accent mb-3">
-        FTC Team 27427 · Vienna Voltage
-      </p>
-      <h1 className="font-sans text-[clamp(2.8rem,7vw,5rem)] font-bold text-voltage-primary tracking-tight leading-none mb-4">
-        Season 2025–26
-      </h1>
-      <p className="font-sans text-xl text-accent-light font-medium mb-4">DECODE</p>
-      <p className="text-muted max-w-[600px] mx-auto leading-[1.85] text-base mb-8">
-        Our second competitive season. Two qualifiers, two awards, a playoff run as Alliance Captain,
-        and a robot built through 8+ major design iterations.
-      </p>
-
-      {/* Stats */}
-      <div className="flex gap-4 justify-center flex-wrap mb-2">
-        {[
-          { val: "2", label: "Qualifiers" },
-          { val: "2", label: "Awards" },
-          { val: "7th", label: "Best Ranking" },
-          { val: "9–5–0", label: "Overall Record" },
-          { val: "Alliance Capt.", label: "Alexandria" },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className="px-5 py-3 rounded-xl border border-border text-center min-w-[90px]"
-            style={{ background: "var(--card)" }}
-          >
-            <p className="font-sans text-base font-bold text-voltage-primary leading-tight">{s.val}</p>
-            <p className="text-[0.65rem] text-muted uppercase tracking-wide mt-0.5">{s.label}</p>
+    <section className="pt-[72px]">
+      <div className="grid lg:grid-cols-12 lg:min-h-[calc(100svh-72px)]">
+        <div className="lg:col-span-5 aspect-[4/3] lg:aspect-auto overflow-hidden bg-surface">
+          <img
+            src="/season/2526/finalrobot.webp"
+            alt="Our finished DECODE robot"
+            width={548}
+            height={588}
+            className="photo drift"
+          />
+        </div>
+        <div className="lg:col-span-7 wrap pt-10 pb-12 lg:pt-14 flex flex-col justify-end gap-12">
+          <div>
+            <h1 className="t-display lines">
+              <span className="line">
+                <span data-line style={{ "--i": 0 } as React.CSSProperties}>DECODE</span>
+              </span>
+              <span className="line">
+                <span data-line style={{ "--i": 1 } as React.CSSProperties}>Season 2025–26</span>
+              </span>
+            </h1>
+            <p className="t-lead mt-6 measure-wide after-lines">
+              Our second competitive season: two qualifiers, two awards, a
+              playoff run as alliance captain, and a robot built through more
+              than eight major design iterations.
+            </p>
+            <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-[var(--gutter)] gap-y-5 mt-10 after-lines">
+              {[
+                { val: "2", label: "Qualifiers" },
+                { val: "2", label: "Awards" },
+                { val: "7th", label: "Best ranking" },
+                { val: "9–5–0", label: "Overall record" },
+                { val: "Alliance captain", label: "Alexandria" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <dt className="t-small text-muted">{s.label}</dt>
+                  <dd className="t-lead font-semibold tabular">{s.val}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-10 after-lines">
+              <Link href="/seasons" className="link">
+                <span aria-hidden>←</span> All seasons
+              </Link>
+            </p>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ─── Sticky Nav ──────────────────────────────────────────────────────── */
+/* ─── Section nav ─────────────────────────────────────────────────────── */
 
-function StickyNav() {
-  const [active, setActive] = useState("robot");
-  const ids = ["robot", "design", "subsystems", "timeline", "competitions", "awards", "outreach", "teampic"];
-  const labels: Record<string,string> = {
-    robot: "Robot", design: "Design Process", subsystems: "Subsystems",
-    timeline: "Build Log", competitions: "Competitions", awards: "Awards", outreach: "Outreach", teampic: "Team Photo",
-  };
+function SectionNav() {
+  const [active, setActive] = useState<string>("robot");
 
   useEffect(() => {
     const handler = () => {
-      const y = window.scrollY + 110;
-      for (const id of [...ids].reverse()) {
+      const y = window.scrollY + 160;
+      for (const [id] of [...SECTIONS].reverse()) {
         const el = document.getElementById(id);
         if (el && el.offsetTop <= y) { setActive(id); break; }
       }
     };
+    handler();
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
   return (
-    <nav
-      className="sticky top-[57px] z-[900] border-b border-border overflow-x-auto"
-      style={{ background: "rgba(8,13,20,.96)", backdropFilter: "blur(14px)" }}
-    >
-      <div className="flex max-w-[1200px] mx-auto px-6">
-        {ids.map(id => (
+    <nav aria-label="On this page" className="sticky top-[72px] z-40 bg-navy text-navy-ink">
+      <div className="drag-row wrap flex gap-6">
+        {SECTIONS.map(([id, label]) => (
           <a
             key={id}
             href={`#${id}`}
-            className="px-4 py-3.5 text-[0.75rem] font-semibold uppercase tracking-wide whitespace-nowrap border-b-2 transition-all duration-200"
-            style={{
-              color: active === id ? "var(--accent-light)" : "var(--muted)",
-              borderBottomColor: active === id ? "var(--accent)" : "transparent",
-            }}
+            aria-current={active === id ? "true" : undefined}
+            className={`py-4 whitespace-nowrap font-semibold underline decoration-[3px] underline-offset-[8px] transition-colors duration-200 ${
+              active === id ? "decoration-yellow" : "decoration-transparent text-navy-soft hover:text-navy-ink"
+            }`}
           >
-            {labels[id]}
+            {label}
           </a>
         ))}
       </div>
@@ -267,132 +268,79 @@ function StickyNav() {
   );
 }
 
-/* ─── Robot Overview ──────────────────────────────────────────────────── */
+/* ─── Robot ───────────────────────────────────────────────────────────── */
 
 function RobotSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
   return (
-    <section id="robot" ref={ref} className="py-20 px-8">
-      <div className="max-w-[1100px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
-
-          {/* Robot photo — from portfolio page 5 */}
-          <div className="fade-in flex flex-col gap-4">
-            <div className="rounded-2xl border border-border overflow-hidden" style={{ aspectRatio: "4/3" }}>
-              <img src="/season/2526/finalrobot.webp" alt="Final robot" className="w-full h-full object-cover" />
-            </div>
-            {/* Drivetrain photo from portfolio */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-border overflow-hidden aspect-video">
-                <img src="/season/2526/drivetrain.webp" alt="Mecanum drivetrain" className="w-full h-full object-cover" />
-              </div>
-              <div className="rounded-xl border border-border overflow-hidden aspect-video">
-                <img src="/season/2526/intake.webp" alt="Intake mechanism" className="w-full h-full object-cover" />
-              </div>
-            </div>
-          </div>
-
-          {/* Specs */}
-          <div className="fade-in">
-            <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2">Specs</p>
-            <h2 className="font-sans text-[clamp(1.7rem,3vw,2.2rem)] font-bold text-voltage-primary mb-6 tracking-tight">
-              Robot Overview
-            </h2>
-            <table className="w-full border-collapse mb-8">
-              <tbody>
-                {[
-                  ["Season game", "DECODE — FTC 2025–26"],
-                  ["Drive train", "Mecanum (4-wheel omnidirectional)"],
-                  ["Control system", "REV Control Hub"],
-                  ["Language", "Java (FTC SDK)"],
-                  ["Intake", "Claw intake (V4) — spring-loaded"],
-                  ["Transfer", "Horizontal claw-to-claw (V3)"],
-                  ["Belt system", "Timing belt — dual hex shaft, 1 servo"],
-                  ["CAD", "OnShape"],
-                ].map(([l, v]) => (
-                  <tr key={l} className="border-b border-border last:border-0">
-                    <td className="py-3 pr-4 text-muted text-[0.72rem] uppercase tracking-wide font-medium w-[40%]">{l}</td>
-                    <td className="py-3 text-voltage-primary font-medium text-[0.88rem]">{v}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Quick award pills */}
-            <div className="flex gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold px-3 py-1.5 rounded-full border" style={{ background: "rgba(245,158,11,.1)", borderColor: "rgba(245,158,11,.3)", color: "#f59e0b" }}>
-                ⚡ Innovate Award (RTX) — 2nd
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold px-3 py-1.5 rounded-full border" style={{ background: "rgba(59,130,246,.1)", borderColor: "rgba(59,130,246,.3)", color: "#60a5fa" }}>
-                🎮 Control Award — Winner
-              </span>
-            </div>
-          </div>
+    <section id="robot" className="section">
+      <div className="wrap grid12 gap-y-10">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Robot overview</h2>
+        <div className="col-span-12 md:col-start-6 md:col-span-7" data-reveal>
+          <table className="w-full border-collapse">
+            <tbody>
+              {[
+                ["Season game", "DECODE, FTC 2025–26"],
+                ["Drive train", "Mecanum, 4-wheel omnidirectional"],
+                ["Control system", "REV Control Hub"],
+                ["Language", "Java (FTC SDK)"],
+                ["Intake", "Claw intake (V4), spring-loaded"],
+                ["Transfer", "Horizontal claw-to-claw (V3)"],
+                ["Belt system", "Timing belt, dual hex shaft, 1 servo"],
+                ["CAD", "OnShape"],
+              ].map(([l, v]) => (
+                <tr key={l} className="border-b border-ink/15 last:border-0"> {/* taste-skill-ignore: real table */}
+                  <th scope="row" className="py-3 pr-4 text-left font-normal text-muted w-[42%] align-top">{l}</th>
+                  <td className="py-3 font-semibold">{v}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="mt-8">
+            Awards this season:{" "}
+            <a href="#awards" className="link">Innovate Award (RTX), 2nd place</a> and the{" "}
+            <a href="#awards" className="link">Control Award</a>.
+          </p>
         </div>
+      </div>
+
+      <div className="wrap grid grid-cols-2 gap-[var(--gutter)] mt-16">
+        <figure data-reveal>
+          <div className="aspect-[4/3] photo-frame">
+            <img src="/season/2526/drivetrain.webp" alt="Mecanum drivetrain" width={456} height={430} loading="lazy" className="photo" />
+          </div>
+          <figcaption className="t-small text-muted mt-2">The mecanum drivetrain, wired for testing.</figcaption>
+        </figure>
+        <figure data-reveal>
+          <div className="aspect-[4/3] photo-frame">
+            <img src="/season/2526/intake.webp" alt="Intake mechanism" width={562} height={430} loading="lazy" className="photo" />
+          </div>
+          <figcaption className="t-small text-muted mt-2">The intake on the build table.</figcaption>
+        </figure>
       </div>
     </section>
   );
 }
 
-/* ─── Design Process ──────────────────────────────────────────────────── */
+/* ─── Design process ──────────────────────────────────────────────────── */
 
 function DesignProcessSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
-  const [open, setOpen] = useState<number | null>(null);
-
-  const steps = [
-    { icon: "💡", title: "Brainstorm", body: "At the start of each meeting, we identify the main problem to solve and create an action plan on a whiteboard. This keeps us focused and consistent throughout the session." },
-    { icon: "✏️", title: "Sketch", body: "After narrowing down ideas, we make detailed whiteboard sketches with measurements and calculations. These act as the starting point for building prototypes." },
-    { icon: "🔧", title: "Design", body: "We build prototypes with FTC-legal parts, test them, discuss improvements as a team, then refine in OnShape (CAD) to optimize and ensure precision for competition." },
-    { icon: "🔩", title: "Assemble", body: "After sketching, we build working models using available parts. We then create a 3D CAD model in OnShape to make it easier to adjust components and achieve the best version." },
-    { icon: "📊", title: "Evaluate", body: "We test thoroughly and compare the mechanism to original sketches. As a team we discuss strengths and weaknesses, deciding which parts to keep and which need improvement." },
-    { icon: "🔁", title: "Iterate", body: "Through multiple targeted iterations we make the design simpler, more reliable, and more versatile. After satisfaction we CAD the final design and integrate with the full robot CAD." },
-  ];
-
   return (
-    <section id="design" ref={ref} className="py-20 px-8" style={{ background: "var(--bg2)" }}>
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">Engineering methodology</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-3 tracking-tight fade-in">Design Process</h2>
-        <p className="text-muted max-w-[600px] mb-10 leading-[1.8] fade-in">
-          Every mechanism on our robot went through this 6-step engineering cycle. The intake went through 4 major versions, the claw through 4, and the transfer through 3.
+    <section id="design" className="section bg-navy text-navy-ink">
+      <div className="wrap grid12 gap-y-6">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Design process</h2>
+        <p className="col-span-12 md:col-start-6 md:col-span-7 t-lead measure-wide" data-reveal>
+          Every mechanism on the robot went through this cycle. The intake took
+          four major versions, the claw four, and the transfer three.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {steps.map((s, i) => (
-            <button
-              key={i}
-              onClick={() => setOpen(open === i ? null : i)}
-              className="fade-in text-left relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 hover:border-[rgba(59,130,246,.4)] hover:-translate-y-0.5 group"
-              style={{
-                background: open === i ? "rgba(59,130,246,.08)" : "var(--card)",
-                borderColor: open === i ? "rgba(59,130,246,.4)" : "var(--border)",
-              }}
-            >
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-60 transition-opacity" style={{ opacity: open === i ? 0.6 : 0 }} />
-              <div className="flex items-center gap-3 mb-3">
-                <span
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold"
-                  style={{ background: "rgba(59,130,246,.12)", color: "#60a5fa" }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="text-xl">{s.icon}</span>
-                <h3 className="font-sans font-semibold text-voltage-primary">{s.title}</h3>
-              </div>
-              <p
-                className="text-muted text-[0.85rem] leading-[1.75] overflow-hidden transition-all duration-300"
-                style={{ maxHeight: open === i ? "200px" : "0px", opacity: open === i ? 1 : 0 }}
-              >
-                {s.body}
-              </p>
-              <p className="text-[0.72rem] text-accent mt-2">{open === i ? "▲ collapse" : "▼ expand"}</p>
-            </button>
-          ))}
-        </div>
       </div>
+      <ol className="wrap grid sm:grid-cols-2 lg:grid-cols-3 gap-x-[var(--gutter)] gap-y-12 mt-16 list-decimal list-inside marker:font-extrabold marker:text-yellow">
+        {DESIGN_STEPS.map((s) => (
+          <li key={s.title} data-reveal>
+            <span className="t-lead font-semibold">{s.title}</span>
+            <p className="mt-3 text-navy-soft measure">{s.body}</p>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
@@ -400,275 +348,169 @@ function DesignProcessSection() {
 /* ─── Subsystems ──────────────────────────────────────────────────────── */
 
 function SubsystemsSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
   const [active, setActive] = useState(0);
+  const cur = SUBSYSTEMS[active];
 
   return (
-    <section id="subsystems" ref={ref} className="py-20 px-8">
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">How it works</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-10 tracking-tight fade-in">Subsystems</h2>
-
-        <div className="fade-in grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-5">
-          <div className="flex flex-col gap-2">
+    <section id="subsystems" className="section">
+      <div className="wrap grid12 gap-y-10">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Subsystems</h2>
+        <div className="col-span-12 md:col-start-6 md:col-span-7" data-reveal>
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Subsystems">
             {SUBSYSTEMS.map((s, i) => (
               <button
-                key={i}
+                key={s.name}
+                type="button"
+                role="tab"
+                aria-selected={active === i}
                 onClick={() => setActive(i)}
-                className="text-left px-4 py-3.5 rounded-xl border transition-all duration-200 flex items-center gap-3"
-                style={{
-                  background: active === i ? "rgba(59,130,246,.1)" : "var(--card)",
-                  borderColor: active === i ? "rgba(59,130,246,.45)" : "var(--border)",
-                  transform: active === i ? "translateX(3px)" : "",
-                }}
+                className={`min-h-[44px] px-4 font-semibold text-left transition-colors duration-200 ${
+                  active === i ? "bg-navy text-navy-ink" : "bg-surface hover:bg-yellow"
+                }`}
               >
-                <span className="text-base">{s.ic}</span>
-                <span className="text-[0.82rem] font-semibold flex-1 text-left" style={{ color: active === i ? "var(--text)" : "var(--muted)" }}>
-                  {s.name}
-                </span>
-                <span className="text-[0.58rem] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded border"
-                  style={{ color: active === i ? "#60a5fa" : "var(--muted)", borderColor: active === i ? "rgba(59,130,246,.4)" : "var(--border)" }}>
-                  {s.tag === "Hardware" ? "HW" : "SW"}
-                </span>
+                {s.name}
               </button>
             ))}
           </div>
-
-          {/* Detail */}
-          <div className="rounded-2xl border border-border p-10 relative overflow-hidden flex flex-col justify-center min-h-[260px]"
-            style={{ background: "linear-gradient(160deg, var(--bg3), var(--bg2))" }}>
-            <div className="absolute top-[-30%] right-[-5%] w-[320px] h-[320px] rounded-full pointer-events-none"
-              style={{ background: "radial-gradient(circle, rgba(59,130,246,.18), transparent 70%)" }} />
-            <div className="relative z-10">
-              <p className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-accent mb-3">
-                Subsystem {String(active + 1).padStart(2, "0")} / {String(SUBSYSTEMS.length).padStart(2, "0")}
-              </p>
-              <div className="text-4xl mb-4">{SUBSYSTEMS[active].ic}</div>
-              <h3 className="font-sans text-[1.6rem] font-bold text-voltage-primary mb-3">{SUBSYSTEMS[active].name}</h3>
-              <p className="text-muted leading-[1.85] text-[0.95rem] max-w-[520px] mb-4">{SUBSYSTEMS[active].body}</p>
-              <span className="inline-block text-[0.68rem] font-semibold uppercase tracking-wide px-2.5 py-1 rounded border text-accent"
-                style={{ background: "rgba(59,130,246,.1)", borderColor: "rgba(59,130,246,.2)" }}>
-                {SUBSYSTEMS[active].tag}
-              </span>
-            </div>
+          <div key={active} role="tabpanel" className="mt-10 panel-in">
+            <p className="t-small text-muted">{cur.tag}</p>
+            <h3 className="t-lead font-semibold">{cur.name}</h3>
+            <p className="mt-4 measure-wide">{cur.body}</p>
           </div>
         </div>
+      </div>
 
-        {/* Iteration photos from portfolio */}
-        <div className="mt-8 fade-in">
-          <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-accent mb-4">Intake iterations (V1 → V4)</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { src: "/season/2526/intake1.webp", label: "V1 — One directional, wide back" },
-              { src: "/season/2526/intake2.webp", label: "V2 — Correct size, still jammed" },
-              { src: "/season/2526/intake3.webp", label: "V3 — Fast traversal, unreliable" },
-              { src: "/season/2526/intake4.webp", label: "V4 — High consistency ✓" },
-            ].map((item, i) => (
-              <div key={i} className="rounded-xl border border-border overflow-hidden" style={{ background: "var(--bg3)" }}>
-                <div className="aspect-square overflow-hidden">
-                  <img src={item.src} alt={item.label} className="w-full h-full object-cover" />
-                </div>
-                <div className="px-3 py-2 border-t border-border">
-                  <p className="text-[0.7rem] text-muted leading-tight">{item.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="wrap mt-[var(--section)]">
+        <div className="grid12 gap-y-4 mb-10">
+          <h3 className="col-span-12 md:col-span-5 t-head" data-reveal>Four versions each</h3>
+          <p className="col-span-12 md:col-start-6 md:col-span-7 measure-wide" data-reveal>
+            The intake and the claw, from first prototype to competition
+            version. Each one is modelled in OnShape with a list of what worked
+            and what did not.
+          </p>
         </div>
-
-        <div className="mt-5 fade-in">
-          <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-accent mb-4">Claw iterations (V1 → V4)</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { src: "/season/2526/claw1.webp", label: "V1 — Good reach, poor grip" },
-              { src: "/season/2526/claw2.webp", label: "V2 — Better hold, inconsistent" },
-              { src: "/season/2526/claw3.webp", label: "V3 — Better fit, still unreliable" },
-              { src: "/season/2526/claw4.webp", label: "V4 — Consistent & reliable ✓" },
-            ].map((item, i) => (
-              <div key={i} className="rounded-xl border border-border overflow-hidden" style={{ background: "var(--bg3)" }}>
-                <div className="aspect-square overflow-hidden">
-                  <img src={item.src} alt={item.label} className="w-full h-full object-cover" />
-                </div>
-                <div className="px-3 py-2 border-t border-border">
-                  <p className="text-[0.7rem] text-muted leading-tight">{item.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div data-reveal>
+          <IterationExplorer />
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── Timeline ────────────────────────────────────────────────────────── */
+/* ─── Build log ───────────────────────────────────────────────────────── */
 
 function TimelineSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
-  const [active, setActive] = useState(0);
-
-  const tagColors: Record<string,{bg:string,color:string}> = {
-    hw: { bg: "rgba(59,130,246,.12)", color: "#60a5fa" },
-    sw: { bg: "rgba(52,211,153,.12)", color: "#34d399" },
-    comp: { bg: "rgba(245,158,11,.12)", color: "#f59e0b" },
-    Planning: { bg: "rgba(139,92,246,.12)", color: "#a78bfa" },
-  };
-
   return (
-    <section id="timeline" ref={ref} className="py-20 px-8" style={{ background: "var(--bg2)" }}>
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">Engineering notebook</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-10 tracking-tight fade-in">Season Timeline</h2>
-
-        {/* Rail */}
-        <div className="fade-in mb-6 relative">
-          <div className="h-px w-full" style={{ background: "var(--border)" }} />
-          <div className="h-px absolute top-0 left-0 transition-all duration-500"
-            style={{ background: "linear-gradient(90deg, #1d4ed8, #60a5fa)", width: `${((active) / (TIMELINE.length - 1)) * 100}%`, boxShadow: "0 0 10px rgba(59,130,246,.7)" }} />
-          <div className="flex justify-between mt-2">
-            {TIMELINE.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)} className="flex flex-col items-center gap-2 flex-1">
-                <div className="w-4 h-4 rounded-full border-2 transition-all duration-300 -mt-[10px]"
-                  style={{
-                    background: i <= active ? "#3b82f6" : "var(--bg3)",
-                    borderColor: i <= active ? "#3b82f6" : "var(--border)",
-                    boxShadow: i === active ? "0 0 0 4px rgba(59,130,246,.2)" : "",
-                  }} />
-                <span className="text-[0.6rem] font-semibold uppercase tracking-wide hidden md:block"
-                  style={{ color: i === active ? "#60a5fa" : "var(--muted)" }}>
-                  {TIMELINE[i].month.split(" ")[0]}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Card */}
-        <div className="fade-in flex gap-4 items-stretch">
-          <button onClick={() => setActive(Math.max(0, active - 1))} disabled={active === 0}
-            className="w-11 flex-shrink-0 rounded-xl border border-border text-accent-light text-2xl transition-all hover:border-[rgba(59,130,246,.5)] hover:bg-[rgba(59,130,246,.08)] disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ background: "var(--card)" }}>‹</button>
-
-          <div className="flex-1 rounded-2xl border border-border p-8 min-h-[160px]" style={{ background: "var(--card)" }}>
-            <div className="flex items-center gap-3 mb-2">
-              <p className="text-[0.72rem] font-bold uppercase tracking-[0.12em] text-accent">
-                {String(active + 1).padStart(2,"0")} / {String(TIMELINE.length).padStart(2,"0")}
-              </p>
-              <span className="text-[0.65rem] font-bold uppercase px-2 py-0.5 rounded"
-                style={{ background: tagColors[TIMELINE[active].tagClass]?.bg, color: tagColors[TIMELINE[active].tagClass]?.color }}>
-                {TIMELINE[active].tag}
-              </span>
-            </div>
-            <h3 className="font-sans text-xl font-bold text-voltage-primary mb-3">{TIMELINE[active].month}</h3>
-            <p className="text-muted leading-[1.85] text-[0.93rem]">{TIMELINE[active].body}</p>
-          </div>
-
-          <button onClick={() => setActive(Math.min(TIMELINE.length - 1, active + 1))} disabled={active === TIMELINE.length - 1}
-            className="w-11 flex-shrink-0 rounded-xl border border-border text-accent-light text-2xl transition-all hover:border-[rgba(59,130,246,.5)] hover:bg-[rgba(59,130,246,.08)] disabled:opacity-30 disabled:cursor-not-allowed"
-            style={{ background: "var(--card)" }}>›</button>
-        </div>
+    <section id="timeline" className="section bg-surface">
+      <div className="wrap grid12 gap-y-6 mb-14">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Build log</h2>
+        <p className="col-span-12 md:col-start-6 md:col-span-7 measure-wide" data-reveal>
+          From the first research in September to the Alexandria qualifier in
+          January, month by month.
+        </p>
       </div>
+      <ol className="wrap grid gap-y-10">
+        {TIMELINE.map((t) => (
+          <li key={t.month} className="grid12 gap-y-2" data-reveal>
+            <div className="col-span-12 md:col-span-4">
+              <p className="t-lead font-semibold">{t.month}</p>
+              <p className={`t-small ${t.tagClass === "comp" ? "font-semibold" : "text-muted"}`}>{t.tag}</p>
+            </div>
+            <p className={`col-span-12 md:col-start-6 md:col-span-7 measure-wide ${t.tagClass === "comp" ? "bg-yellow p-5 -mx-5 md:mx-0" : ""}`}>
+              {t.body}
+            </p>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
 
 /* ─── Competitions ────────────────────────────────────────────────────── */
 
-function CompetitionsSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
+type Match = { score: number; result: string; label?: string };
 
-  const resultStyle = (r: string) => ({
-    background: r === "W" ? "rgba(52,211,153,.1)" : r === "T" ? "rgba(245,158,11,.1)" : "rgba(239,68,68,.1)",
-    borderColor: r === "W" ? "rgba(52,211,153,.3)" : r === "T" ? "rgba(245,158,11,.3)" : "rgba(239,68,68,.3)",
-    color: r === "W" ? "#34d399" : r === "T" ? "#f59e0b" : "#f87171",
-  });
-
+function MatchBars({ matches, prefix }: { matches: Match[]; prefix?: string }) {
+  const max = 211;
   return (
-    <section id="competitions" ref={ref} className="py-20 px-8">
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">Match results</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-10 tracking-tight fade-in">Competitions</h2>
+    <ul className="flex items-end gap-2 h-[220px]" aria-label="Match scores">
+      {matches.map((m, j) => {
+        const label = m.label ?? `${prefix}${j + 1}`;
+        const win = m.result === "W";
+        return (
+          <li key={label} className="group flex-1 min-w-0 max-w-[72px] h-full flex flex-col justify-end">
+            <span className="t-small font-semibold tabular text-center">{m.score}</span>
+            <span
+              className={`block mt-1 origin-bottom transition-transform duration-300 group-hover:scale-y-[1.03] ${win ? "bg-win" : "bg-loss"}`}
+              style={{ height: `${Math.max(8, (m.score / max) * 150)}px` }}
+              aria-hidden
+            />
+            <span className="t-small text-center mt-1 leading-tight">
+              {label}
+              <span className={`block ${win ? "text-win font-semibold" : "text-loss font-semibold"}`}>{win ? "W" : "L"}</span>
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
-        <div className="flex flex-col gap-8">
-          {COMPETITIONS.map((comp, i) => (
-            <div key={i} className="fade-in rounded-2xl border border-border overflow-hidden" style={{ background: "var(--card)" }}>
+function CompetitionsSection() {
+  return (
+    <section id="competitions" className="section">
+      <div className="wrap grid12 gap-y-6 mb-14">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Competitions</h2>
+        <p className="col-span-12 md:col-start-6 md:col-span-7 measure-wide" data-reveal>
+          Our alliance score in every match, qualification and playoff. Green
+          bars are wins, red bars are losses.
+        </p>
+      </div>
 
-              {/* Header */}
-              <div className="px-7 pt-7 pb-5 border-b border-border"
-                style={{ background: `linear-gradient(90deg, ${comp.awardColor}08, transparent)` }}>
-                <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-                  <div>
-                    <h3 className="font-sans text-xl font-bold text-voltage-primary">{comp.name}</h3>
-                    <p className="text-muted text-sm mt-0.5">{comp.date}</p>
-                  </div>
-                  <span className="inline-block text-[0.7rem] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full"
-                    style={{ background: comp.awardColor + "18", color: comp.awardColor, border: `1px solid ${comp.awardColor}40` }}>
-                    {comp.award}
-                  </span>
+      <div className="wrap grid gap-y-20">
+        {COMPETITIONS.map((comp) => (
+          <article key={comp.name} className="grid12 gap-y-8" data-reveal>
+            <div className="col-span-12 md:col-span-5">
+              <h3 className="t-lead font-semibold">{comp.name}</h3>
+              <p className="text-muted">{comp.date}</p>
+              <p className="mt-4 inline-block bg-yellow px-3 py-1 font-semibold">{comp.award}</p>
+              <dl className="grid grid-cols-2 gap-x-[var(--gutter)] gap-y-4 mt-8">
+                <div>
+                  <dt className="t-small text-muted">Qual ranking</dt>
+                  <dd className="font-semibold tabular">{comp.qualRank}</dd>
                 </div>
-              </div>
-
-              {/* Stats */}
-              <div className="grid divide-x divide-border" style={{ gridTemplateColumns: comp.playoffs ? "repeat(4, 1fr)" : "repeat(2, 1fr)" }}>
-                <div className="px-6 py-4">
-                  <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-1">Qual Ranking</p>
-                  <p className="font-sans font-bold text-voltage-primary text-lg">{comp.qualRank}</p>
-                </div>
-                <div className="px-6 py-4">
-                  <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-1">Qual Record</p>
-                  <p className="font-sans font-bold text-voltage-primary text-lg">{comp.qualRecord}</p>
+                <div>
+                  <dt className="t-small text-muted">Qual record</dt>
+                  <dd className="font-semibold tabular">{comp.qualRecord}</dd>
                 </div>
                 {comp.playoffs && (
                   <>
-                    <div className="px-6 py-4">
-                      <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-1">Alliance</p>
-                      <p className="font-sans font-bold text-voltage-primary text-lg">{comp.allianceRole}</p>
+                    <div>
+                      <dt className="t-small text-muted">Alliance</dt>
+                      <dd className="font-semibold">{comp.allianceRole}</dd>
                     </div>
-                    <div className="px-6 py-4">
-                      <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-1">Playoff Record</p>
-                      <p className="font-sans font-bold text-voltage-primary text-lg">{comp.playoffRecord}</p>
+                    <div>
+                      <dt className="t-small text-muted">Playoff record</dt>
+                      <dd className="font-semibold tabular">{comp.playoffRecord}</dd>
                     </div>
                   </>
                 )}
+              </dl>
+            </div>
+            <div className="col-span-12 md:col-start-6 md:col-span-7 grid sm:grid-cols-2 gap-10">
+              <div>
+                <p className="t-small text-muted mb-4">Qualification matches</p>
+                <MatchBars matches={comp.qualMatches} prefix="Q" />
               </div>
-
-              {/* Qual matches */}
-              <div className="px-7 py-5 border-t border-border">
-                <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-3">Qualification matches (our alliance score)</p>
-                <div className="flex gap-2 flex-wrap">
-                  {comp.qualMatches.map((m, j) => (
-                    <div key={j} className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg border min-w-[52px] text-center"
-                      style={resultStyle(m.result)}>
-                      <span className="text-[0.58rem] font-bold uppercase" style={{ color: resultStyle(m.result).color }}>{m.result}</span>
-                      <span className="font-sans font-bold text-voltage-primary text-sm">{m.score}</span>
-                      <span className="text-[0.58rem] text-muted">Q{j + 1}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Playoff matches */}
               {comp.playoffs && comp.playoffMatches && (
-                <div className="px-7 py-5 border-t border-border" style={{ background: "rgba(59,130,246,.03)" }}>
-                  <p className="text-[0.62rem] uppercase tracking-wide text-muted mb-3">Playoff matches (our alliance score)</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {comp.playoffMatches.map((m, j) => (
-                      <div key={j} className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg border min-w-[58px] text-center"
-                        style={resultStyle(m.result)}>
-                        <span className="text-[0.58rem] font-bold uppercase" style={{ color: resultStyle(m.result).color }}>{m.result}</span>
-                        <span className="font-sans font-bold text-voltage-primary text-sm">{m.score}</span>
-                        <span className="text-[0.58rem] text-muted">{m.label}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div>
+                  <p className="t-small text-muted mb-4">Playoff matches</p>
+                  <MatchBars matches={comp.playoffMatches} />
                 </div>
               )}
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -677,121 +519,91 @@ function CompetitionsSection() {
 /* ─── Awards ──────────────────────────────────────────────────────────── */
 
 function AwardsSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
-
   return (
-    <section id="awards" ref={ref} className="py-20 px-8" style={{ background: "var(--bg2)" }}>
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">Recognition</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-10 tracking-tight fade-in">Awards</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {AWARDS.map((award, i) => (
-            <div key={i} className="fade-in relative rounded-2xl border p-8 overflow-hidden transition-all duration-300 hover:-translate-y-1"
-              style={{ background: award.bg, borderColor: award.border }}>
-              <div className="absolute top-0 left-0 right-0 h-[2px]"
-                style={{ background: `linear-gradient(90deg, transparent, ${award.color}, transparent)` }} />
-              <div className="text-4xl mb-5">{award.icon}</div>
-              <span className="inline-block text-[0.65rem] font-bold uppercase tracking-wide px-2.5 py-1 rounded mb-3"
-                style={{ background: award.color + "22", color: award.color, border: `1px solid ${award.color}40` }}>
-                {award.place}
-              </span>
-              <h3 className="font-sans text-xl font-bold text-voltage-primary mb-1">{award.name}</h3>
-              <p className="text-muted text-sm mb-1">{award.event}</p>
-              <p className="text-sm font-semibold mb-5" style={{ color: award.color }}>{award.date}</p>
-              <p className="text-muted text-[0.88rem] leading-[1.75]">{award.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+    <section id="awards" className="grid lg:grid-cols-2">
+      {AWARDS.map((award, i) => (
+        <article
+          key={award.name}
+          className={`wrap pt-16 pb-16 md:pt-24 md:pb-24 flex flex-col justify-between gap-16 min-h-[70svh] ${
+            i === 0 ? "bg-yellow text-navy" : "bg-blue text-white"
+          }`}
+        >
+          <div data-reveal>
+            <h2 className="t-head max-w-[16ch]">{award.name}</h2>
+            <p className="t-lead font-semibold mt-4">{award.place}</p>
+          </div>
+          <div data-reveal>
+            <p className="font-semibold">{award.event}, {award.date}</p>
+            <p className="mt-3 measure">{award.desc}</p>
+          </div>
+        </article>
+      ))}
     </section>
   );
 }
 
 /* ─── Outreach ────────────────────────────────────────────────────────── */
 
+const OUTREACH_PHOTOS = [
+  { src: "/season/2526/java.webp", w: 1196, h: 1008 },
+  { src: "/season/2526/stemnight.jpg", w: 1067, h: 800 },
+  { src: "/season/2526/churchill.jpg", w: 650, h: 433 },
+];
+
 function OutreachSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
-
   return (
-    <section id="outreach" ref={ref} className="py-20 px-8">
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">Community impact</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-3 tracking-tight fade-in">Outreach</h2>
-        <p className="text-muted max-w-[560px] mb-10 leading-[1.8] fade-in">
-          We impacted over 230 students and families this season through workshops, STEAM events, and coaching FIRST LEGO League teams.
+    <section id="outreach" className="section">
+      <div className="wrap grid12 gap-y-6 mb-14">
+        <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Outreach</h2>
+        <p className="col-span-12 md:col-start-6 md:col-span-7 t-lead measure-wide" data-reveal>
+          We reached more than 230 students and families this season through
+          workshops, STEAM events and coaching FIRST LEGO League teams.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {OUTREACH.map((item, i) => (
-            <div key={i} className="fade-in relative overflow-hidden rounded-2xl border border-border p-7 transition-all duration-300 hover:border-[rgba(59,130,246,.35)] hover:-translate-y-1"
-              style={{ background: "var(--card)" }}>
-              <div className="absolute top-0 left-0 right-0 h-px opacity-60"
-                style={{ background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
-              <span className="text-3xl mb-4 block">{item.icon}</span>
-              <h3 className="font-sans text-base font-semibold text-voltage-primary mb-1">{item.title}</h3>
-              <p className="text-accent text-[0.72rem] font-semibold mb-3">{item.students}</p>
-              <p className="text-muted text-[0.86rem] leading-[1.75]">{item.body}</p>
-
-              {/* Photo */}
-              <div className="mt-5 rounded-xl border border-border overflow-hidden aspect-video">
-                <img
-                  src={i === 0 ? "/season/2526/java.webp" : i === 1 ? "/season/2526/stemnight.jpg" : "/season/2526/churchill.jpg"}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+      </div>
+      <div className="wrap grid md:grid-cols-3 gap-x-[var(--gutter)] gap-y-14">
+        {OUTREACH.map((item, i) => (
+          <article key={item.title} data-reveal>
+            <div className="aspect-[4/3] photo-frame">
+              <img
+                src={OUTREACH_PHOTOS[i].src}
+                alt={item.title}
+                width={OUTREACH_PHOTOS[i].w}
+                height={OUTREACH_PHOTOS[i].h}
+                loading="lazy"
+                className="photo"
+              />
             </div>
-          ))}
-        </div>
+            <h3 className="t-lead font-semibold mt-5">{item.title}</h3>
+            <p className="font-semibold text-accent">{item.students}</p>
+            <p className="mt-3">{item.body}</p>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
 
-/* ─── Team Photo ──────────────────────────────────────────────────────── */
+/* ─── Team photo ──────────────────────────────────────────────────────── */
 
 function TeamPhotoSection() {
-  const ref = useRef<HTMLElement>(null);
-  useFadeIn(ref);
-
   return (
-    <section id="teampic" ref={ref} className="py-20 px-8" style={{ background: "var(--bg2)" }}>
-      <div className="max-w-[1100px] mx-auto">
-        <p className="text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-accent mb-2 fade-in">The crew</p>
-        <h2 className="font-sans text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-voltage-primary mb-3 tracking-tight fade-in">Team Photo</h2>
-        <p className="text-muted max-w-[560px] mb-10 leading-[1.8] fade-in">Vienna Voltage — FTC Team 27427, Season 2025–26.</p>
-
-        <div className="fade-in rounded-2xl border border-border overflow-hidden">
+    <section id="teampic" className="pb-[var(--section)]">
+      <figure data-reveal>
+        <div className="max-h-[88svh] overflow-hidden">
           <img
             src="/season/2526/teampic.webp"
-            alt="Vienna Voltage team photo — Season 2025–26"
+            alt="Vienna Voltage team photo, Season 2025–26"
+            width={1736}
+            height={1302}
+            loading="lazy"
             className="w-full object-cover"
-            style={{ maxHeight: "600px" }}
           />
         </div>
-      </div>
+        <figcaption className="wrap mt-4">
+          Vienna Voltage, FTC Team 27427, Season 2025–26.{" "}
+          <Link href="/team" className="link">Meet the team <span className="arrow">→</span></Link>
+        </figcaption>
+      </figure>
     </section>
   );
-}
-
-/* ─── Helpers ─────────────────────────────────────────────────────────── */
-
-function Divider() {
-  return <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />;
-}
-
-function useFadeIn(ref: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const els = ref.current?.querySelectorAll(".fade-in");
-    if (!els) return;
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.08 }
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
 }

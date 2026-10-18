@@ -1,144 +1,100 @@
-"use client";
-
-import { useEffect, useRef } from "react";
+const USES = [
+  {
+    title: "Robotics equipment",
+    description: "Motors, sensors, electronics, building materials and the engineering tools we use throughout the FTC season.",
+    photo: { src: "/season/2526/drivetrain.webp", alt: "Our mecanum drivetrain, built from donated parts", w: 456, h: 430 },
+  },
+  {
+    title: "Competitions",
+    description: "FTC registration fees, tournament participation, travel, and the team resources we need to compete.",
+    photo: { src: "/season/2526/teampic.webp", alt: "The team at a 2025–26 qualifier", w: 1736, h: 1302 },
+  },
+  {
+    title: "STEM outreach",
+    description: "Workshops, demonstrations and hands-on robotics activities for elementary and middle school students.",
+    photo: { src: "/season/2526/java.webp", alt: "Our Java class at Herbert Hoover Middle School", w: 1196, h: 1008 },
+  },
+  {
+    title: "Future growth",
+    description: "Expanding our outreach and creating more chances for students to discover STEM.",
+    photo: { src: "/season/2526/stemnight.jpg", alt: "Elementary students meeting our robot at STEAM night", w: 1067, h: 800 },
+  },
+];
 
 export default function DonatePage() {
-  const pageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const els = pageRef.current?.querySelectorAll(".fade-in");
-    if (!els) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.15 }
-    );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div ref={pageRef}>
+    <>
       {/* Hero */}
-      <section
-        className="relative pt-[160px] pb-20 px-6 text-center border-b border-border"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 50% at 50% 0%,rgba(29,78,216,.2) 0%,transparent 70%)",
-        }}
-      >
-        <div className="max-w-[700px] mx-auto fade-in">
-          <p className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-accent mb-3">
-            Support the team
+      <section className="pt-[72px]">
+        <div className="wrap grid12 gap-y-8 pt-[clamp(64px,14vh,160px)] pb-[clamp(56px,10vh,120px)] items-end">
+          <p className="left-zone t-body measure after-lines order-2 min-[900px]:order-1">
+            Your gift builds robots, pays for FTC events, grows our STEM
+            outreach, and puts real tools in the hands of the students who
+            will build after us.
           </p>
-          <h1 className="font-sans text-[clamp(2.4rem,5vw,3.5rem)] font-bold text-voltage-primary tracking-tight mb-5">
-            Donate
+          <h1 className="on-axis t-display lines order-1 min-[900px]:order-2">
+            <span className="line">
+              <span data-line style={{ "--i": 0 } as React.CSSProperties}>Donate</span>
+            </span>
           </h1>
-          <p className="text-muted text-lg leading-relaxed max-w-[600px] mx-auto">
-            Your generosity helps us build robots, compete in FTC events, expand
-            STEM outreach, and inspire the next generation of engineers in our
-            community.
+        </div>
+      </section>
+
+      {/* Two ways to give */}
+      <section className="grid md:grid-cols-2">
+        <a
+          href="https://hcb.hackclub.com/donations/start/27427-vienna-voltage"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group bg-blue text-white wrap pt-14 pb-14 md:pt-20 md:pb-20 min-h-[48svh] flex flex-col justify-between gap-10 hover:bg-[#163fb3] transition-colors duration-200"
+        >
+          <p className="font-semibold" data-reveal>Official donation page</p>
+          <div data-reveal>
+            <p className="t-head">
+              Give directly <span className="arrow">→</span>
+            </p>
+            <p className="mt-3 measure opacity-90">
+              Through Hack Club HCB. Opens in a new tab.
+            </p>
+          </div>
+        </a>
+        <a
+          href="https://gofund.me/e5f7d42bb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group bg-yellow text-navy wrap pt-14 pb-14 md:pt-20 md:pb-20 min-h-[48svh] flex flex-col justify-between gap-10 hover:bg-[#ffe04d] transition-colors duration-200"
+        >
+          <p className="font-semibold" data-reveal>GoFundMe</p>
+          <div data-reveal>
+            <p className="t-head">
+              Give on GoFundMe <span className="arrow">→</span>
+            </p>
+            <p className="mt-3 measure">Our team fundraiser. Opens in a new tab.</p>
+          </div>
+        </a>
+      </section>
+
+      {/* Where it goes */}
+      <section className="section">
+        <div className="wrap grid12 gap-y-6 mb-14">
+          <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Where it goes</h2>
+          <p className="col-span-12 md:col-start-6 md:col-span-7 t-lead measure-wide" data-reveal>
+            Every contribution helps Vienna Voltage bring robotics education and
+            competitive STEM to our community.
           </p>
         </div>
-      </section>
-
-      {/* Donation Methods */}
-      <section className="py-24 px-6">
-        <div className="max-w-[800px] mx-auto fade-in">
-          <div
-            className="rounded-[20px] p-[60px] text-center border border-border"
-            style={{ background: "var(--bg3)" }}
-          >
-            <h2 className="font-sans text-[clamp(1.6rem,3vw,2.2rem)] font-bold text-voltage-primary tracking-tight mb-4">
-              Choose a Donation Method
-            </h2>
-            <p className="text-muted text-base leading-relaxed mb-10 max-w-[500px] mx-auto">
-              Every contribution helps Team Vienna Voltage provide robotics
-              education and competitive STEM experiences to our community.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <a
-                href="https://gofund.me/e5f7d42bb"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5"
-                style={{ background: "#02a95c" }}
-              >
-                <span>💚</span> GoFundMe
-              </a>
-              <a
-                href="https://hcb.hackclub.com/donations/start/27427-vienna-voltage"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 py-4 px-7 rounded-[10px] font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5"
-                style={{ background: "#0070ba" }}
-              >
-                <span>🔵</span> Official Donation Page
-              </a>
-            </div>
-          </div>
+        <div className="wrap grid sm:grid-cols-2 gap-x-[var(--gutter)] gap-y-14">
+          {USES.map((u) => (
+            <article key={u.title} data-reveal>
+              <div className="aspect-[16/10] photo-frame">
+                <img src={u.photo.src} alt={u.photo.alt} width={u.photo.w} height={u.photo.h} loading="lazy" className="photo" />
+              </div>
+              <h3 className="t-lead font-semibold mt-5">{u.title}</h3>
+              <p className="mt-2 measure-wide">{u.description}</p>
+            </article>
+          ))}
         </div>
       </section>
-
-      {/* What your donation supports */}
-      <section className="py-24 px-6">
-        <div className="max-w-[1000px] mx-auto">
-          <div className="text-center mb-14 fade-in">
-            <p className="text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-accent mb-3">
-              Where it goes
-            </p>
-            <h2 className="font-sans text-[clamp(1.8rem,4vw,2.6rem)] font-bold text-voltage-primary tracking-tight">
-              What your donation supports
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <SupportCard
-              icon="🤖"
-              title="Robotics Equipment"
-              description="Motors, sensors, electronics, building materials, and engineering tools used throughout the FTC season."
-            />
-            <SupportCard
-              icon="🏆"
-              title="Competitions"
-              description="FTC registration fees, tournament participation, travel expenses, and team resources needed to compete."
-            />
-            <SupportCard
-              icon="📚"
-              title="STEM Outreach"
-              description="Workshops, demonstrations, and hands-on robotics activities for elementary and middle school students."
-            />
-            <SupportCard
-              icon="🚀"
-              title="Future Growth"
-              description="Expanding our outreach efforts and creating more opportunities for students to discover STEM."
-            />
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function SupportCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="fade-in bg-card border border-border rounded-[14px] p-8 transition-all duration-200 hover:border-[rgba(59,130,246,.4)] hover:-translate-y-1">
-      <span className="text-3xl mb-4 block">{icon}</span>
-      <h3 className="font-sans text-lg font-semibold text-voltage-primary mb-2">
-        {title}
-      </h3>
-      <p className="text-muted text-sm leading-relaxed">{description}</p>
-    </div>
+    </>
   );
 }
