@@ -93,6 +93,12 @@ const members: Member[] = [
     bio: "Langley 2029 + Langley SciOly 25-26 Season. I like aerospace and I do martial arts.",
   },
   {
+    name: "Alex W",
+    photo: "alex.png",
+    tags: ["Build"],
+    bio: "McLean '30"
+  },
+  {
     name: "Bryan T",
     photo: "bryantan.webp",
     tags: ["Build"],
@@ -111,27 +117,21 @@ const members: Member[] = [
     bio: "My name is Landon, and I am a rising 10th grade student at TJ. I enjoy robotics and coding.",
   },
   {
+    name: "Benjamin W",
+    initials: "BW",
+    tags: ["Software", "Outreach"],
+    bio: "TJHSST '29"
+  },
+  {
     name: "Ryan I",
     initials: "RI",
     tags: ["Outreach"],
     bio: "TJHSST '29",
   },
   {
-    name: "Alex W",
-    initials: "AW",
-    tags: ["Build"],
-    bio: "McLean '30"
-  },
-  {
     name: "Brandon Q",
     initials: "BQ",
     tags: ["Outreach"],
-    bio: "TJHSST '29"
-  },
-  {
-    name: "Benjamin W",
-    initials: "BW",
-    tags: ["Software"],
     bio: "TJHSST '29"
   },
 ];
