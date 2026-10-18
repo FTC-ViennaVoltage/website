@@ -70,7 +70,7 @@ const members: Member[] = [
   },
   {
     name: "Essam M",
-    initials: "EM",
+    photo: "essam.png",
     tags: ["Outreach Lead", "Build"],
     bio: "Hey! I'm Essam, I love research, community involvement, and teaching. Additionally, I used to despise pickles, now I like them.",
   },
