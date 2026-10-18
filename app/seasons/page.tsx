@@ -90,30 +90,6 @@ export default function SeasonsPage() {
           </div>
         </div>
       </Link>
-
-      {/* A strip from the DECODE season */}
-      <section className="pt-[var(--section)] pb-[var(--section)]">
-        <div className="wrap grid12 gap-y-6 mb-10">
-          <h2 className="col-span-12 md:col-span-5 t-head" data-reveal>Inside DECODE</h2>
-          <p className="col-span-12 md:col-start-6 md:col-span-7 measure-wide" data-reveal>
-            The robot, the drivetrain under it, and the classrooms where we
-            spent our outreach hours.{" "}
-            <Link href="/seasons/2526" className="link">The full season <span className="arrow">→</span></Link>
-          </p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4">
-          {[
-            { src: "/season/2526/finalrobot.webp", alt: "The finished DECODE robot", w: 548, h: 588 },
-            { src: "/season/2526/drivetrain.webp", alt: "Mecanum drivetrain", w: 456, h: 430 },
-            { src: "/season/2526/java.webp", alt: "Teaching Java at Herbert Hoover Middle School", w: 1196, h: 1008 },
-            { src: "/season/2526/stemnight.jpg", alt: "STEAM night at Kent Gardens Elementary", w: 1067, h: 800 },
-          ].map((p) => (
-            <div key={p.src} className="aspect-square photo-frame" data-reveal>
-              <img src={p.src} alt={p.alt} width={p.w} height={p.h} loading="lazy" className="photo" />
-            </div>
-          ))}
-        </div>
-      </section>
     </>
   );
 }
