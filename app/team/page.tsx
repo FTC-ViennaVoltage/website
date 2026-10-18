@@ -130,9 +130,9 @@ const members: Member[] = [
   },
   {
     name: "Brandon Q",
-    initials: "BQ",
+    photo: "brandon.png",
     tags: ["Outreach"],
-    bio: "TJHSST '29"
+    bio: "TJHSST 2029. I am from Iowa and I like interacting with others."
   },
 ];
 
