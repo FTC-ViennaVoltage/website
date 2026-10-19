@@ -99,12 +99,6 @@ const members: Member[] = [
     bio: "McLean '30. I like to CAD a lot."
   },
   {
-    name: "Bryan T",
-    photo: "bryantan.webp",
-    tags: ["Build"],
-    bio: "TJ '29. I love learning about STEM and applying my knowledge in the real world. For example, statistically speaking, K-Pop is mid at best. 😉",
-  },
-  {
     name: "Caden O",
     initials: "CO",
     tags: ["Software"],
