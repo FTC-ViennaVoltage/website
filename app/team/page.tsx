@@ -46,7 +46,7 @@ const PLACEHOLDER_BIO =
 const members: Member[] = [
   {
     name: "Harry B",
-    photo: "harrybai.png",
+    photo: "harryb.png",
     tags: ["Captain", "Build", "Software", "Outreach"],
     bio: "Langley '29. I listen to K-Pop and I'm a certified vibecoder.",
   },
