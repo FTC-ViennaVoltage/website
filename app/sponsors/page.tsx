@@ -15,7 +15,7 @@ type Sponsor = {
 
 /* Current sponsors, keyed by tier name. Each one fills an open spot. */
 const SPONSORS: Record<string, Sponsor[]> = {
-  Silver: [
+  Bronze: [
     {
       name: "Sunshine Academy",
       url: "https://sunshine-academy.org/",
