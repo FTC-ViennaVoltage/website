@@ -15,6 +15,15 @@ type Sponsor = {
 
 /* Current sponsors, keyed by tier name. Each one fills an open spot. */
 const SPONSORS: Record<string, Sponsor[]> = {
+  Silver: [
+    {
+      name: "CleverSys Inc.",
+      url: "https://cleversysinc.com/CleverSysInc/",
+      logo: "/sponsors/cleversys.png",
+      blurb:
+        "CleverSys builds video-analysis software that automatically tracks and scores animal behavior for neuroscience and drug research labs.",
+    },
+  ],
   Bronze: [
     {
       name: "Sunshine Academy",
