@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Schibsted_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/nav";
 import Footer from "@/components/footer";
@@ -12,10 +12,13 @@ export const metadata: Metadata = {
     'Vienna Voltage is FIRST Tech Challenge team 27427, a student robotics team from Northern Virginia that builds competition robots and teaches younger students to build their own.',
 };
 
-const schibsted = Schibsted_Grotesk({
+/* Bundled in the repo (OFL-1.1, see app/fonts) so building the site
+   never depends on reaching Google Fonts. */
+const schibsted = localFont({
+  src: "./fonts/SchibstedGrotesk-Variable.woff2",
   variable: "--font-schibsted",
-  subsets: ["latin"],
-  weight: ["400", "600", "800"],
+  weight: "400 900",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -37,7 +40,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full">
+      <body className={`${schibsted.className} min-h-full`}>
         <Nav />
         <main className="relative z-[1] bg-bg">{children}</main>
         <Footer />
