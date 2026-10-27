@@ -23,6 +23,12 @@ const SPONSORS: Record<string, Sponsor[]> = {
       blurb:
         "CleverSys builds video-analysis software that automatically tracks and scores animal behavior for neuroscience and drug research labs.",
     },
+    {
+      name: "CyberMirage",
+      url: "https://cybermirage.tech/",
+      logo: "/sponsors/cybermirage.png",
+      blurb: "CyberMirage is a cybersecurity company.",
+    },
   ],
   Bronze: [
     {
