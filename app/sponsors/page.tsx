@@ -29,6 +29,24 @@ const SPONSORS: Record<string, Sponsor[]> = {
       logo: "/sponsors/cybermirage.png",
       blurb: "CyberMirage is a cybersecurity company.",
     },
+    {
+      name: 'American Chinese School',
+      url: 'https://acsdc.us/',
+      logo: '/sponsors/acs.png',
+      blurb: 'American Chinese School (美中实验学校) is a weekend Chinese language and cultural school.'
+    },
+    {
+      name: 'RMFG',
+      url: 'https://rmfg.com',
+      logo: '/sponsors/rmfg.png',
+      blurb: 'RMFG is a US sheet metal fabrication service.'
+    },
+    {
+      name: 'PGM Vectors',
+      url: 'https://pgmvectors.com',
+      logo: '/sponsors/pgm.png',
+      blurb: 'PGM Vectors is a venture capital firm in Washington, DC.'
+    }
   ],
   Bronze: [
     {
@@ -231,4 +249,3 @@ function SponsorTile({ sponsor }: { sponsor: Sponsor }) {
     </a>
   );
 }
-
